@@ -23,6 +23,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -62,14 +63,19 @@ fun OnboardingCarousel(onFinished: () -> Unit){
             topBar = { },
             bottomBar = {
                 // Add bottom app bar controls here
-                BottomAppBar(modifier = Modifier.padding(horizontal = 16.dp), containerColor = nhsGrey5, content = {
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                BottomAppBar( containerColor = nhsGrey5, content = {
+
+                    Row( modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+
                         if (page > 0) { TextButton(onClick = { coroutineScope.launch() { pagerState.animateScrollToPage(pagerState.currentPage - 1) }}, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
                             Row (verticalAlignment = Alignment.CenterVertically) {
                                 Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null)
                                 Text("Previous", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
                             }
                         } }
+
+                        Spacer(modifier = Modifier.padding(horizontal = 24.dp))
+
                         if (page == 3) { TextButton(onClick = onFinished, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
                             Row (verticalAlignment = Alignment.CenterVertically) {
 

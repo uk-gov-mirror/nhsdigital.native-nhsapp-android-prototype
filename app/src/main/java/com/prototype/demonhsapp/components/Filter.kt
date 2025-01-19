@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.components
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,13 +49,21 @@ import kotlinx.coroutines.launch
 @Composable
 fun Filter() {
 
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
     // Remember variable which shows or hides the sheet
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
 
     // Button which triggers the remember state variable
-    TextButton(onClick = { showBottomSheet = true }, modifier = Modifier.padding(bottom = 8.dp)) {
+    TextButton(onClick = {
+        showBottomSheet = true
+        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                         },
+        modifier = Modifier.padding(bottom = 8.dp)) {
         Icon(imageVector = Icons.Default.FilterList, contentDescription = null, tint = nhsBlue, modifier = Modifier.padding(end = 8.dp))
         Text("Filter", color = nhsBlue, fontSize = 16.sp)
     }
@@ -72,6 +84,7 @@ fun Filter() {
                                 showBottomSheet = false
                             }
                         }
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
                     }) { Icon(imageVector = Icons.Default.Close, contentDescription = "Close") }
                     Text("Filter by", style = MaterialTheme.typography.titleLarge)
                 }

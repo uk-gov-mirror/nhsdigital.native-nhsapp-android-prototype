@@ -5,6 +5,7 @@ package com.prototype.demonhsapp.screens.yourhealth.prescriptions
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -72,7 +73,8 @@ fun Prescriptions2 (navController: NavController, modifier: Modifier) {
         },
         floatingActionButton = { RichTooltipSample() },
         bottomBar = {
-            BottomAppBar(modifier.padding(horizontal = 16.dp), containerColor = nhsGrey5, content = { Column {
+            BottomAppBar(containerColor = nhsGrey5, content = {
+                Column (modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
                 TextButton(onClick = { /*TODO*/}, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
                     Row (verticalAlignment = Alignment.CenterVertically) { Icon(imageVector = Icons.Outlined.Medication, contentDescription = null)
                         Text("Request new prescription", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)

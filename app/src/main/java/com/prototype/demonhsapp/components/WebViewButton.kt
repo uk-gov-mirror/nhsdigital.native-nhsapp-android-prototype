@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.components
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,6 +49,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun WebViewButton() {
 
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
     // Remember variable which shows or hides the sheet
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -53,7 +60,10 @@ fun WebViewButton() {
 
     // Button which triggers the remember state variable
     ListItem(
-        modifier = Modifier.clickable(onClick = {showBottomSheet = true}),
+        modifier = Modifier.clickable(onClick = {
+            showBottomSheet = true
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+        }),
         colors = ListItemDefaults.colors(Color.White) ,
         headlineContent = { Text("Check if you need urgent medical help using 111 online", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
         leadingContent = { },
@@ -80,6 +90,7 @@ fun WebViewButton() {
                                     showBottomSheet = false
                                 }
                             }
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
                         }) { Icon(imageVector = Icons.Default.Close, contentDescription = "Close") }
                         Text("www.111.nhs.uk", style = MaterialTheme.typography.titleLarge)
                     }

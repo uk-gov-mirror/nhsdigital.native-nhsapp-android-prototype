@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.screens.accountsettings
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +48,8 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountSettings(navController: NavController, modifier: Modifier) {
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val showAlertDialog = remember { mutableStateOf(false) }
 
@@ -71,7 +76,10 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                         Card (Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*do something*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*do something*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Manage services for another person", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -85,7 +93,10 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Change your contact or login details", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -99,7 +110,10 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Turn on fingerprint, face or iris login", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -113,7 +127,10 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Manage notifications", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -126,7 +143,10 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Manage cookies and read legal information", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -139,7 +159,10 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Update your GP surgery on changes to your personal details", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },

@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.screens.messages
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +46,10 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Messages(navController: NavController, modifier: Modifier) {
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -93,7 +99,10 @@ fun Messages(navController: NavController, modifier: Modifier) {
                         Card (Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {navController.navigate(Routes.yourMessages)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.yourMessages)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Your NHS healthcare services", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -107,7 +116,10 @@ fun Messages(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Your hospital and specialist doctors", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -121,7 +133,10 @@ fun Messages(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Replies to your GP requests", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -135,7 +150,10 @@ fun Messages(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("GP surgery messaging", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },

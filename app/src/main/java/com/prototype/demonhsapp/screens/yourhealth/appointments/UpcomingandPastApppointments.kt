@@ -2,6 +2,7 @@ package com.prototype.demonhsapp.screens.yourhealth.appointments
 
 
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,7 +51,10 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpcomingAndPastAppointments(navController: NavController, modifier: Modifier) {
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -57,7 +63,10 @@ fun UpcomingAndPastAppointments(navController: NavController, modifier: Modifier
                     Text("Upcoming and past appointments", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 32.sp, fontWeight = FontWeight.Normal)
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back to previous screen"
@@ -93,7 +102,10 @@ fun UpcomingAndPastAppointments(navController: NavController, modifier: Modifier
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = { /*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("GP surgery appointments", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -106,8 +118,10 @@ fun UpcomingAndPastAppointments(navController: NavController, modifier: Modifier
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {navController.navigate(
-                                        Routes.referrals)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.referrals)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Referrals", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { Badge(content = {Text("1")}) },
@@ -120,7 +134,10 @@ fun UpcomingAndPastAppointments(navController: NavController, modifier: Modifier
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Hospital appointments", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -133,7 +150,10 @@ fun UpcomingAndPastAppointments(navController: NavController, modifier: Modifier
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Waiting list", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },

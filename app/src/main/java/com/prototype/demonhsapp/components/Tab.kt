@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.components
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Tab
@@ -14,6 +15,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.prototype.demonhsapp.screens.yourhealth.prescriptions.PastPrescriptions2
@@ -26,6 +30,10 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 @Preview
 @Composable
 fun TabScreen() {
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
     var tabIndex by remember { mutableIntStateOf(0) }
 
     val tabs = listOf("Recent", "Past")
@@ -49,7 +57,11 @@ fun TabScreen() {
                     color = if (tabIndex == index) nhsBlue else nhsBlack
                 ) },
                     selected = tabIndex == index,
-                    onClick = { tabIndex = index }
+                    onClick = {
+                        tabIndex = index
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+//                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                    }
                 )
             }
         }

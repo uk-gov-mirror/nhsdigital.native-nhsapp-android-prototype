@@ -1,6 +1,7 @@
 package com.prototype.demonhsapp.components
 
 
+import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -49,8 +50,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -75,6 +79,11 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PrescriptionDetailModal(){
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
+    // Remember modal state and bottom sheet state
     var showDetail by remember { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -83,7 +92,10 @@ fun PrescriptionDetailModal(){
     // Button that triggers the modal to show details
     Column () {
         ListItem(
-            modifier = Modifier.clickable(onClick = { showDetail = !showDetail}),
+            modifier = Modifier.clickable(onClick = {
+                showDetail = !showDetail
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+            }),
             colors = ListItemDefaults.colors(Color.White) ,
             headlineContent = { Text("One off prescription", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
             leadingContent = { },
@@ -128,7 +140,10 @@ fun PrescriptionDetailModal(){
                             Text("One off prescription", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 32.sp, fontWeight = FontWeight.Normal)
                         },
                         navigationIcon = {
-                            IconButton(onClick = { showDetail = false }) {
+                            IconButton(onClick = {
+                                showDetail = false
+                                view.playSoundEffect(SoundEffectConstants.CLICK)
+                            }) {
                                 Icon(
                                     imageVector = Icons.Outlined.Close,
                                     contentDescription = "Close details"
@@ -142,7 +157,12 @@ fun PrescriptionDetailModal(){
                 },
                 bottomBar = {
                     BottomAppBar(modifier = Modifier.height(150.dp).padding(horizontal = 16.dp), containerColor = nhsGrey5, content = { Column {
-                        TextButton(onClick = { showBottomSheet = !showBottomSheet}, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
+                        TextButton(onClick = {
+                            showBottomSheet = !showBottomSheet
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                             },
+                            colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)
+                        ) {
                             Row (verticalAlignment = Alignment.CenterVertically) { Icon(imageVector = Icons.Outlined.ShoppingBag, contentDescription = null)
                                 Text("Show barcode", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
                             }
@@ -238,6 +258,7 @@ fun PrescriptionDetailModal(){
                                                         showBottomSheet = false
                                                     }
                                                 }
+                                                view.playSoundEffect(SoundEffectConstants.CLICK)
                                             }) { Icon(imageVector = Icons.Default.Close, contentDescription = "Close") }
                                             Text("Barcode", style = MaterialTheme.typography.titleLarge)
                                         }

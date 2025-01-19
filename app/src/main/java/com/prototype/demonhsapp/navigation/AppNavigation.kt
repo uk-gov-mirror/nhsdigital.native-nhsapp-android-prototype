@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.navigation
 
+import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
@@ -33,6 +34,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -65,6 +69,10 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey
 
 @Composable
 fun AppNavigation(){
+
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
 
     //data class which defines variables for the list
 
@@ -110,6 +118,8 @@ fun AppNavigation(){
                                 launchSingleTop = true
                                 restoreState = true
                             }
+//                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                                   },
                         icon = { BadgedBox(badge = { if (navItem.badgeCount != null) {Badge{ Text(text = navItem.badgeCount.toString()) }} else if (navItem.hasNews) { Badge() } }) { Icon(imageVector = if (index == selectedIndex) {navItem.selectedIcon} else navItem.unselectedIcon, contentDescription = null) } },
                         label = { Text(text = navItem.label)},

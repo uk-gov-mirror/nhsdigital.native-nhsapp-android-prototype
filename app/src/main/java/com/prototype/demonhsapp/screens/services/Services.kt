@@ -1,6 +1,7 @@
 package com.prototype.demonhsapp.screens.services
 
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.components.AccountButton
 import com.prototype.demonhsapp.components.HelpButton
 import com.prototype.demonhsapp.navigation.Routes
+import com.prototype.demonhsapp.ui.theme.nhsGrey
 import com.prototype.demonhsapp.ui.theme.nhsGrey2
 import com.prototype.demonhsapp.ui.theme.nhsGrey4
 import com.prototype.demonhsapp.ui.theme.nhsGrey5
@@ -43,6 +47,8 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Services(navController: NavController, modifier: Modifier) {
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -91,7 +97,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                     //Section title
                     item() {
                         Column (modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
-                            Text("Your GP services", fontSize = 18.sp, fontWeight = FontWeight.Normal)
+                            Text("Your GP services", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = nhsGrey)
                         }
                     }
                     //Start of list
@@ -99,8 +105,10 @@ fun Services(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {navController.navigate(
-                                        Routes.prescriptions)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.prescriptions)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Request medicines", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -113,7 +121,10 @@ fun Services(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Contact your GP surgery for a document or update", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -126,7 +137,10 @@ fun Services(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Check for available GP appointments", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -143,7 +157,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                     //Section title
                     item() {
                         Column (modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
-                            Text("Other NHS services", fontSize = 18.sp, fontWeight = FontWeight.Normal)
+                            Text("Other NHS services", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = nhsGrey)
                         }
                     }
                     //Start of list
@@ -151,7 +165,10 @@ fun Services(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Check if you need urgent medical help using 111 online", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -164,7 +181,10 @@ fun Services(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Find NHS services near you", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -180,7 +200,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                     //Section title
                     item() {
                         Column (modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
-                            Text("Find health information", fontSize = 18.sp, fontWeight = FontWeight.Normal)
+                            Text("Find health information", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = nhsGrey)
                         }
                     }
                     // Start of list
@@ -188,7 +208,10 @@ fun Services(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Browse NHS health information", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -201,7 +224,10 @@ fun Services(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Browse NHS medicines information", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -214,7 +240,10 @@ fun Services(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Find COVID-19 guidance", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },

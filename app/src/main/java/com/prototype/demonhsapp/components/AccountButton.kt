@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.components
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +43,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountButton() {
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
 
     // Remember variable which shows or hides the sheet
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -46,7 +53,11 @@ fun AccountButton() {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     // Button which triggers the remember state variable
-    IconButton(onClick = { showBottomSheet = true }) {
+    IconButton(onClick = {
+        showBottomSheet = true
+        view.playSoundEffect(SoundEffectConstants.CLICK)
+//        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+    }) {
         Icon(
             imageVector = Icons.Outlined.AccountCircle,
             contentDescription = "Account and settings",
@@ -70,6 +81,7 @@ fun AccountButton() {
                                     showBottomSheet = false
                                 }
                             }
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
                         }) { Icon(imageVector = Icons.Default.Close, contentDescription = "Close") }
                         Text("Account and settings", fontSize = 20.sp, fontWeight = FontWeight.Normal)
                     }

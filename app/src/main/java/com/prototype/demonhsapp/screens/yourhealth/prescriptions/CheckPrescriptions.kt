@@ -1,6 +1,7 @@
 package com.prototype.demonhsapp.screens.yourhealth.prescriptions
 
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,7 +55,10 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CheckPrescriptions(navController: NavController, modifier: Modifier) {
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -61,7 +67,10 @@ fun CheckPrescriptions(navController: NavController, modifier: Modifier) {
                     Text("Check if your prescriptions are ready", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 32.sp, fontWeight = FontWeight.Normal)
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back to previous screen"
@@ -97,7 +106,10 @@ fun CheckPrescriptions(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = { navController.navigate(Routes.prescriptionsDetail)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.prescriptionsDetail)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("One off prescription", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -131,7 +143,10 @@ fun CheckPrescriptions(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = { navController.navigate(Routes.pastPrescriptions)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.pastPrescriptions)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Past prescriptions", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },

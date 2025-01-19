@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.components
 
+import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -24,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,11 +39,19 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey4
 @Preview
 @Composable
 fun Barcode(){
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
     var showBarcode by remember { mutableStateOf(false) }
+
     Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
         Column () {
             ListItem(
-                modifier = Modifier.padding(horizontal = 0.dp).clickable(onClick = { showBarcode = !showBarcode}),
+                modifier = Modifier.padding(horizontal = 0.dp).clickable(onClick = {
+                    showBarcode = !showBarcode
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                }),
                 colors = ListItemDefaults.colors(Color.White) ,
                 headlineContent = { Text("Your prescription barcode", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 0.dp), color = nhsBlue, fontWeight = FontWeight.SemiBold) },
                 overlineContent = { },

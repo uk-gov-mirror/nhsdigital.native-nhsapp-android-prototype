@@ -2,6 +2,7 @@ package com.prototype.demonhsapp.screens.services.prescriptions
 
 
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +30,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +51,8 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Prescriptions(navController: NavController, modifier: Modifier) {
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -56,7 +62,10 @@ fun Prescriptions(navController: NavController, modifier: Modifier) {
                     Text("Request medicines", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 32.sp, fontWeight = FontWeight.Normal)
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back to previous screen"
@@ -73,7 +82,10 @@ fun Prescriptions(navController: NavController, modifier: Modifier) {
         },
         bottomBar = {
             BottomAppBar(modifier.height(150.dp).padding(horizontal = 16.dp), containerColor = nhsGrey5, content = { Column {
-                TextButton(onClick = { /*TODO*/}, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
+                TextButton(onClick = {
+                /*TODO*/
+                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                }, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
                     Row (verticalAlignment = Alignment.CenterVertically) { Icon(imageVector = Icons.AutoMirrored.Outlined.HelpOutline, contentDescription = null)
                         Text("Help with medical abbreviations", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
                     }

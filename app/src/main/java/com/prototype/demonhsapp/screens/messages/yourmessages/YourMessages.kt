@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.screens.messages.yourmessages
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +48,10 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun YourMessages(navController: NavController) {
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -54,7 +60,10 @@ fun YourMessages(navController: NavController) {
                     Text("Your messages", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 32.sp, fontWeight = FontWeight.Normal)
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back to messages"
@@ -102,8 +111,10 @@ fun YourMessages(navController: NavController) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = { navController.navigate(
-                                        Routes.messageDetail)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.messageDetail)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Portland Street Great Westwood Surgery", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp), fontWeight = FontWeight.SemiBold) },
                                     leadingContent = { Badge { Text("") } },
@@ -117,7 +128,10 @@ fun YourMessages(navController: NavController) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Portland Street Great Westood Surgery", fontWeight = FontWeight.SemiBold, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { Badge { Text("") } },
@@ -131,7 +145,10 @@ fun YourMessages(navController: NavController) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Hughenden Valley Surgery", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
@@ -145,7 +162,10 @@ fun YourMessages(navController: NavController) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("NHS App", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = {  },

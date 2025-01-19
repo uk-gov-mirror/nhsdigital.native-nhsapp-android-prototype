@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.screens.home
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.Image
 import com.prototype.demonhsapp.R
 import androidx.compose.ui.res.painterResource
@@ -37,8 +38,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,6 +66,9 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 @Composable
 fun Home(navController: NavController, modifier: Modifier) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -69,14 +76,7 @@ fun Home(navController: NavController, modifier: Modifier) {
                 title = {
                     Text("", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 32.sp, fontWeight = FontWeight.Normal)
                 },
-                navigationIcon = {
-//                    IconButton(onClick = { /* doSomething() */ }) {
-//                        Icon(
-//                            imageVector = Icons.Filled.Menu,
-//                            contentDescription = "Localized description"
-//                        )
-//                    }
-                },
+                navigationIcon = { },
                 actions = {
                     HelpButton()
                     AccountButton()
@@ -85,17 +85,10 @@ fun Home(navController: NavController, modifier: Modifier) {
                 scrollBehavior = scrollBehavior
             )
         },
-        bottomBar = {
-//            NavigationBar(containerColor = nhsBlue, modifier = Modifier) {
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Default.Home, contentDescription = null)}, label = {Text("Home")}, selected = true, onClick = {navController.navigate(Routes.home)}, colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.LocalHospital, contentDescription = null)}, label = {Text("Services")}, selected = false, onClick = {navController.navigate(Routes.services)}, colors = NavigationBarItemColors(selectedIconColor = nhsBlue, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White, disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = null)}, label = {Text("Your health")}, selected = false, onClick = {navController.navigate(Routes.yourHealth)}, colors = NavigationBarItemColors(selectedIconColor = nhsBlue, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White, disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = { BadgedBox(badge = { Badge{ Text("2", modifier = Modifier.semantics(){contentDescription = "8 new notifications"}) } }) {Icon(imageVector = Icons.Outlined.Email, contentDescription = null)}}, label = {Text("Messages")}, selected = false, onClick = {navController.navigate(Routes.messages)}, colors = NavigationBarItemColors(selectedIconColor = nhsBlue, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White, disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//
-//            }
-        },
+        bottomBar = { },
         content = { values ->
             Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize()) {
+
                 LazyColumn(
                     modifier = Modifier
                         .padding(values)
@@ -134,7 +127,10 @@ fun Home(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {navController.navigate(Routes.prescriptions)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.prescriptions)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Request medicines", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -162,7 +158,10 @@ fun Home(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("GP health record", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -175,7 +174,10 @@ fun Home(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {navController.navigate(Routes.prescriptions2)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.prescriptions2)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Prescriptions", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -188,8 +190,10 @@ fun Home(navController: NavController, modifier: Modifier) {
                             }
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {navController.navigate(
-                                        Routes.upcomingAndAastAppointments)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.upcomingAndAastAppointments)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Upcoming and past appointments", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
@@ -213,7 +217,10 @@ fun Home(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {navController.navigate(Routes.yourMessages)}),
+                                    modifier = Modifier.clickable(onClick = {
+                                        navController.navigate(Routes.yourMessages)
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("View your messages", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { Icon(Icons.Outlined.Email, contentDescription = null) },
@@ -237,7 +244,10 @@ fun Home(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 ListItem(
-                                    modifier = Modifier.clickable(onClick = {/*TODO*/}),
+                                    modifier = Modifier.clickable(onClick = {
+                                    /*TODO*/
+                                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                                    }),
                                     colors = ListItemDefaults.colors(Color.White) ,
                                     headlineContent = { Text("Manage services for another person", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { BadgedBox( badge = {Badge(content = { Text("2") })} ){ Icon(Icons.Outlined.SupervisedUserCircle, contentDescription = null)  } },
@@ -257,7 +267,10 @@ fun Home(navController: NavController, modifier: Modifier) {
                     }
                     item() {
 
-                        TextButton(onClick = { /*TODO*/}, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
+                        TextButton(onClick = {
+                        /*TODO*/
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        }, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
                             Row (verticalAlignment = Alignment.CenterVertically) { Icon(imageVector = Icons.AutoMirrored.Outlined.HelpOutline, contentDescription = null)
                                 Text("Get help using the NHS App", modifier = Modifier.padding(start = 8.dp), fontSize = 18.sp,)
                             }

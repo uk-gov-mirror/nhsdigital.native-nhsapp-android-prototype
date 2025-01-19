@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.components
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,8 +26,16 @@ import com.prototype.demonhsapp.ui.theme.nhsGreen
 
 @Composable
 fun ButtonPrimary(text:String, onClick: () -> Unit) {
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
    Button(
-        onClick = { onClick() },
+        onClick = {
+            onClick()
+//            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                  },
         modifier = Modifier
             .padding(bottom = 24.dp)
 //            .shadow(elevation = 16.dp)
@@ -40,8 +52,16 @@ fun ButtonPrimary(text:String, onClick: () -> Unit) {
 
 @Composable
 fun ButtonSecondary (text:String, onClick: () -> Unit) {
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
     OutlinedButton (
-        onClick = { onClick() },
+        onClick = {
+            onClick()
+            //            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                  },
         modifier = Modifier
             .padding(bottom = 24.dp)
 //            .shadow(elevation = 16.dp)
@@ -59,8 +79,16 @@ fun ButtonSecondary (text:String, onClick: () -> Unit) {
 
 @Composable
 fun ButtonTetiary (text:String, onClick: () -> Unit) {
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
     TextButton (
-        onClick = { onClick() },
+        onClick = {
+            onClick()
+            //            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                  },
         modifier = Modifier
             .padding(bottom = 24.dp)
 //            .shadow(elevation = 16.dp)

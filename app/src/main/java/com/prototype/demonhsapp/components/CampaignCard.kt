@@ -1,5 +1,6 @@
 package com.prototype.demonhsapp.components
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,8 +25,20 @@ import com.prototype.demonhsapp.ui.theme.nhsDarkBlue
 @Preview (showBackground = true, backgroundColor = 0xFFF0F4F5)
 @Composable
 fun CampaignCard() {
+    // Sound effects and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
     Column (Modifier.padding(bottom = 16.dp)) {
-        Card(onClick = {/*TODO*/ }, modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(nhsDarkBlue)) {
+        Card(
+            onClick = {
+            /*TODO*/
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+//        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+            },
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(nhsDarkBlue)
+        ) {
             Column() {
                 Image(painterResource(R.drawable.campaign_card_image_3), contentDescription = null, contentScale = ContentScale.Fit)
                 Column(modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp)) {
