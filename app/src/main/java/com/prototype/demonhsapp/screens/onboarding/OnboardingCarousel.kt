@@ -34,8 +34,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,6 +55,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingCarousel(onFinished: () -> Unit){
+
+    // Sound and haptics
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
     // Remember page count
     val pagerState = rememberPagerState(pageCount = {4})
     val coroutineScope = rememberCoroutineScope()
@@ -67,7 +75,10 @@ fun OnboardingCarousel(onFinished: () -> Unit){
 
                     Row( modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
 
-                        if (page > 0) { TextButton(onClick = { coroutineScope.launch() { pagerState.animateScrollToPage(pagerState.currentPage - 1) }}, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
+                        if (page > 0) { TextButton(onClick = {
+                            coroutineScope.launch() { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                                             }, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
                             Row (verticalAlignment = Alignment.CenterVertically) {
                                 Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null)
                                 Text("Previous", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
@@ -76,12 +87,17 @@ fun OnboardingCarousel(onFinished: () -> Unit){
 
                         Spacer(modifier = Modifier.padding(horizontal = 24.dp))
 
-                        if (page == 3) { TextButton(onClick = onFinished, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
+                        if (page == 3) { TextButton(
+                            onClick = onFinished,
+                            colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
                             Row (verticalAlignment = Alignment.CenterVertically) {
 
                                 Text("Done", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
                             }
-                        } } else TextButton(onClick = { coroutineScope.launch() { pagerState.animateScrollToPage(pagerState.currentPage + 1) } }, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
+                        } } else TextButton(onClick = {
+                            coroutineScope.launch() { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                                      }, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
                             Row (verticalAlignment = Alignment.CenterVertically) {
                                 Text("Next", modifier = Modifier.padding(end = 8.dp), fontSize = 16.sp,)
                                 Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null)
