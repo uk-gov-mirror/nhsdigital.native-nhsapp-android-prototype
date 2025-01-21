@@ -15,6 +15,7 @@ import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CropSquare
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,11 +28,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.nestedscroll.nestedScrollModifierNode
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +50,7 @@ import com.prototype.demonhsapp.components.AccountButton
 import com.prototype.demonhsapp.components.ButtonPrimary
 import com.prototype.demonhsapp.components.HelpButton
 import com.prototype.demonhsapp.ui.theme.nhsBlue
+import com.prototype.demonhsapp.ui.theme.nhsGrey4
 import com.prototype.demonhsapp.ui.theme.nhsGrey5
 
 
@@ -53,13 +59,14 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 fun Prescriptions(navController: NavController, modifier: Modifier) {
     val view = LocalView.current
     val haptics = LocalHapticFeedback.current
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MediumTopAppBar(
                 title = {
-                    Text("Request medicines", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 32.sp, fontWeight = FontWeight.Normal)
+                    Text("Request medicines", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -76,12 +83,13 @@ fun Prescriptions(navController: NavController, modifier: Modifier) {
                     HelpButton()
                     AccountButton()
                 },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = nhsGrey5, scrolledContainerColor = nhsGrey5),
+                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = nhsGrey5, scrolledContainerColor = nhsGrey4.copy(alpha = 0.2f)),
                 scrollBehavior = scrollBehavior
             )
         },
         bottomBar = {
-            BottomAppBar(modifier.height(150.dp).padding(horizontal = 16.dp), containerColor = nhsGrey5, content = { Column {
+            BottomAppBar(modifier.height(220.dp).padding(horizontal = 16.dp), containerColor = nhsGrey5, content = {
+                Column(verticalArrangement = Arrangement.Center, modifier = Modifier.padding(bottom = 64.dp)) {
                 TextButton(onClick = {
                 /*TODO*/
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)

@@ -64,76 +64,76 @@ fun OnboardingCarousel(onFinished: () -> Unit){
     val pagerState = rememberPagerState(pageCount = {4})
     val coroutineScope = rememberCoroutineScope()
 
-    // Pager function
-    HorizontalPager(state = pagerState) { page ->
-        // Our page content
-        Scaffold(
-            topBar = { },
-            bottomBar = {
-                // Add bottom app bar controls here
-                BottomAppBar( containerColor = nhsGrey5, content = {
+    Scaffold(
+        topBar = { },
+        bottomBar = {
+            // Add bottom app bar controls here
+            BottomAppBar( containerColor = nhsGrey5, content = {
 
-                    Row( modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                Row( modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
 
-                        if (page > 0) { TextButton(onClick = {
-                            coroutineScope.launch() { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
-                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                                             }, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
-                            Row (verticalAlignment = Alignment.CenterVertically) {
-                                Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null)
-                                Text("Previous", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
-                            }
-                        } }
+                    if (pagerState.currentPage > 0) { TextButton(onClick = {
+                        coroutineScope.launch() { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
+                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                    }, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
+                        Row (verticalAlignment = Alignment.CenterVertically) {
+                            Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null)
+                            Text("Previous", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
+                        }
+                    } }
 
-                        Spacer(modifier = Modifier.padding(horizontal = 24.dp))
+                    Spacer(modifier = Modifier.padding(horizontal = 24.dp))
 
-                        if (page == 3) { TextButton(
-                            onClick = onFinished,
-                            colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
-                            Row (verticalAlignment = Alignment.CenterVertically) {
+                    if (pagerState.currentPage == 3) { TextButton(
+                        onClick = onFinished,
+                        colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
+                        Row (verticalAlignment = Alignment.CenterVertically) {
 
-                                Text("Done", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
-                            }
-                        } } else TextButton(onClick = {
-                            coroutineScope.launch() { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
-                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                                      }, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
-                            Row (verticalAlignment = Alignment.CenterVertically) {
-                                Text("Next", modifier = Modifier.padding(end = 8.dp), fontSize = 16.sp,)
-                                Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null)
-                            }
+                            Text("Done", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
+                        }
+                    } } else TextButton(onClick = {
+                        coroutineScope.launch() { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                    }, colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
+                        Row (verticalAlignment = Alignment.CenterVertically) {
+                            Text("Next", modifier = Modifier.padding(end = 8.dp), fontSize = 16.sp,)
+                            Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null)
                         }
                     }
                 }
-                )
-            },
-            content = { values ->
-                Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize().padding(values)) {
+            }
+            )
+        },
+        content = { values ->
+            //Background
+            Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize().padding(values)) {
+                // Pager function
+                HorizontalPager(state = pagerState) { page ->
+                    // Our page content
                     if (page == 0){ OnboardingScreen1() }
                     else if(page == 1) { OnboardingScreen2() }
                     else if(page == 2) { OnboardingScreen3() }
                     else if (page == 3) { OnboardingScreen4() }
 
-                    Column(verticalArrangement = Arrangement.Bottom) {
-                        Row(modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(bottom = 8.dp), horizontalArrangement = Arrangement.Center) {
-                            repeat(pagerState.pageCount) { iteration ->
-                                val color = if (pagerState.currentPage == iteration) nhsBlack else nhsGrey3
-                                Box(
-                                    modifier = Modifier
-                                        .padding(2.dp)
-                                        .clip(CircleShape)
-                                        .background(color)
-                                        .size(8.dp)
-                                )
-                            }
+                }
+                // Indicator
+                Column(verticalArrangement = Arrangement.Bottom) {
+                    Row(modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(bottom = 8.dp), horizontalArrangement = Arrangement.Center) {
+                        repeat(pagerState.pageCount) { iteration ->
+                            val color = if (pagerState.currentPage == iteration) nhsBlack else nhsGrey3
+                            Box(
+                                modifier = Modifier
+                                    .padding(2.dp)
+                                    .clip(CircleShape)
+                                    .background(color)
+                                    .size(8.dp)
+                            )
                         }
                     }
-
                 }
-
             }
-        )
-    }
+        }
+    )
 }
 
 

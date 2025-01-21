@@ -17,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -32,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.components.AccountButton
 import com.prototype.demonhsapp.components.HelpButton
 import com.prototype.demonhsapp.ui.theme.nhsGrey
+import com.prototype.demonhsapp.ui.theme.nhsGrey4
 import com.prototype.demonhsapp.ui.theme.nhsGrey5
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,14 +41,14 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey5
 fun MessageDetail(navController: NavController, modifier: Modifier) {
     val view = LocalView.current
     val haptics = LocalHapticFeedback.current
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MediumTopAppBar(
                 title = {
-                    Text("Portland Street Great Westwood Surgery", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 32.sp, fontWeight = FontWeight.Normal)
+                    Text("Portland Street Great Westwood Surgery", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -63,7 +65,7 @@ fun MessageDetail(navController: NavController, modifier: Modifier) {
                     HelpButton()
                     AccountButton()
                 },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = nhsGrey5, scrolledContainerColor = nhsGrey5),
+                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = nhsGrey5, scrolledContainerColor = nhsGrey4.copy(alpha = 0.2f)),
                 scrollBehavior = scrollBehavior
             )
         },

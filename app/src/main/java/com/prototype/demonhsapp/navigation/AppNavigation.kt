@@ -128,12 +128,12 @@ fun AppNavigation(){
                 }
             }
         },
-        content = { values ->
+        content = { padding ->
             // Map the navigation host to specific screens
             NavHost(
                 navController = navController,
                 startDestination = Routes.home,
-                modifier = Modifier.padding(values),
+                modifier = Modifier.padding(),
 //        enterTransition = { fadeIn(animationSpec = tween(700, easing = LinearEasing)) + slideIntoContainer(animationSpec = tween(300, easing = EaseIn), towards = AnimatedContentTransitionScope.SlideDirection.Start) },
 //        exitTransition = { fadeOut(animationSpec = tween(700, easing = LinearEasing)) + slideOutOfContainer(animationSpec = tween(300, easing = EaseOut), towards = AnimatedContentTransitionScope.SlideDirection.End) },
 //        popEnterTransition = { fadeIn(animationSpec = tween(700, easing = LinearEasing)) + slideIntoContainer(animationSpec = tween(300, easing = EaseIn), towards = AnimatedContentTransitionScope.SlideDirection.End) },
