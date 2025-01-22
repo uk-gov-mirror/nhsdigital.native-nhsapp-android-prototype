@@ -17,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MediumTopAppBar
@@ -56,7 +57,7 @@ fun YourMessages(navController: NavController) {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            MediumTopAppBar(
+            LargeTopAppBar(
                 title = {
                     Text("Your messages", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
                 },
@@ -79,15 +80,7 @@ fun YourMessages(navController: NavController) {
                 scrollBehavior = scrollBehavior
             )
         },
-        bottomBar = {
-//            NavigationBar(containerColor = nhsBlue, modifier = Modifier) {
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.Home, contentDescription = null)}, label = {Text("Home")}, selected = false, onClick = {navController.navigate(Routes.home)}, colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.LocalHospital, contentDescription = null)}, label = {Text("Services")}, selected = false, onClick = {navController.navigate(Routes.services)}, colors = NavigationBarItemColors(selectedIconColor = nhsBlue, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White, disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = null)}, label = {Text("Your health")}, selected = false, onClick = {navController.navigate(Routes.yourHealth)}, colors = NavigationBarItemColors(selectedIconColor = nhsBlue, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White, disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = { BadgedBox(badge = { Badge{ Text("2", modifier = Modifier.semantics(){contentDescription = "8 new notifications"}) } }) {Icon(imageVector = Icons.Default.Email, contentDescription = null)} }, label = {Text("Messages")}, selected = true, onClick = {navController.navigate(Routes.messages)}, colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//
-//            }
-        },
+        bottomBar = { },
         content = { values ->
             Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
@@ -117,7 +110,7 @@ fun YourMessages(navController: NavController) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Portland Street Great Westwood Surgery", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp), fontWeight = FontWeight.SemiBold) },
+                                    headlineContent = { Text("Portland Street Great Westwood Surgery", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp), fontWeight = FontWeight.SemiBold) },
                                     leadingContent = { Badge { Text("") } },
                                     overlineContent = { Text("1:02pm", fontWeight = FontWeight.SemiBold)  },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
@@ -134,7 +127,7 @@ fun YourMessages(navController: NavController) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Portland Street Great Westood Surgery", fontWeight = FontWeight.SemiBold, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Portland Street Great Westood Surgery", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { Badge { Text("") } },
                                     overlineContent = { Text("Thursday") },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
@@ -151,7 +144,7 @@ fun YourMessages(navController: NavController) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Hughenden Valley Surgery", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Hughenden Valley Surgery", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { Text("4 Oct 2023") },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
@@ -168,7 +161,7 @@ fun YourMessages(navController: NavController) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("NHS App", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("NHS App", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = {  },
                                     overlineContent = { Text("18 Sep 2023") },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))},

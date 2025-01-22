@@ -15,6 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MediumTopAppBar
@@ -54,7 +55,7 @@ fun Messages(navController: NavController, modifier: Modifier) {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            MediumTopAppBar(
+            LargeTopAppBar(
                 title = {
                     Text("Messages", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
                 },
@@ -105,7 +106,7 @@ fun Messages(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Your NHS healthcare services", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Your NHS healthcare services", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { Badge { Text("2") }  },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
@@ -122,7 +123,7 @@ fun Messages(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Your hospital and specialist doctors", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Your hospital and specialist doctors", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
@@ -139,7 +140,7 @@ fun Messages(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Replies to your GP requests", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Replies to your GP requests", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
@@ -156,7 +157,7 @@ fun Messages(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("GP surgery messaging", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("GP surgery messaging", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))},

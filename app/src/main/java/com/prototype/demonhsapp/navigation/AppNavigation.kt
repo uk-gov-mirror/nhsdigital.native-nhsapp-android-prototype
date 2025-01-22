@@ -38,6 +38,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -133,7 +134,7 @@ fun AppNavigation(){
             NavHost(
                 navController = navController,
                 startDestination = Routes.home,
-                modifier = Modifier.padding(),
+                modifier = Modifier.padding(bottom = 88.dp),
 //        enterTransition = { fadeIn(animationSpec = tween(700, easing = LinearEasing)) + slideIntoContainer(animationSpec = tween(300, easing = EaseIn), towards = AnimatedContentTransitionScope.SlideDirection.Start) },
 //        exitTransition = { fadeOut(animationSpec = tween(700, easing = LinearEasing)) + slideOutOfContainer(animationSpec = tween(300, easing = EaseOut), towards = AnimatedContentTransitionScope.SlideDirection.End) },
 //        popEnterTransition = { fadeIn(animationSpec = tween(700, easing = LinearEasing)) + slideIntoContainer(animationSpec = tween(300, easing = EaseIn), towards = AnimatedContentTransitionScope.SlideDirection.End) },

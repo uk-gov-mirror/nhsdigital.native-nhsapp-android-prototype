@@ -15,6 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MediumTopAppBar
@@ -54,7 +55,7 @@ fun Services(navController: NavController, modifier: Modifier) {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            MediumTopAppBar(
+            LargeTopAppBar(
                 title = {
                     Text("Services", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
                 },
@@ -74,15 +75,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                 scrollBehavior = scrollBehavior
             )
         },
-        bottomBar = {
-//            NavigationBar(containerColor = nhsBlue, modifier = Modifier) {
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.Home, contentDescription = null)}, label = {Text("Home")}, selected = false, onClick = {navController.navigate(Routes.home)}, colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Default.LocalHospital, contentDescription = null)}, label = {Text("Services")}, selected = true, onClick = {navController.navigate(Routes.services)}, colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = null)}, label = {Text("Your health")}, selected = false, onClick = {navController.navigate(Routes.yourHealth)}, colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = { BadgedBox(badge = { Badge{ Text("2", modifier = Modifier.semantics(){contentDescription = "8 new notifications"}) } }) {Icon(imageVector = Icons.Outlined.Email, contentDescription = null)} }, label = {Text("Messages")}, selected = false, onClick = {navController.navigate(Routes.messages)}, colors = NavigationBarItemColors(selectedIconColor = nhsBlue, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White, disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//
-//            }
-        },
+        bottomBar = { },
         content = { values ->
             Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
@@ -111,7 +104,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Request medicines", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Request medicines", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -127,7 +120,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Contact your GP surgery for a document or update", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Contact your GP surgery for a document or update", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -143,7 +136,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Check for available GP appointments", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Check for available GP appointments", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -171,7 +164,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Check if you need urgent medical help using 111 online", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Check if you need urgent medical help using 111 online", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -187,7 +180,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Find NHS services near you", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Find NHS services near you", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -214,7 +207,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Browse NHS health information", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Browse NHS health information", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -230,7 +223,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Browse NHS medicines information", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Browse NHS medicines information", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -246,7 +239,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Find COVID-19 guidance", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Find COVID-19 guidance", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},

@@ -15,6 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MediumTopAppBar
@@ -55,7 +56,7 @@ fun YourHealth(navController: NavController, modifier: Modifier) {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            MediumTopAppBar(
+            LargeTopAppBar(
                 title = {
                     Text("Your health", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
                 },
@@ -106,7 +107,7 @@ fun YourHealth(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("GP health record", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("GP health record", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -122,7 +123,7 @@ fun YourHealth(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("View and manage prescriptions", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("View and manage prescriptions", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -138,7 +139,7 @@ fun YourHealth(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Upcoming and past appointments", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Upcoming and past appointments", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { Badge(content = { Text("2") }) },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -154,7 +155,7 @@ fun YourHealth(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Test results and imaging", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Test results and imaging", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -170,7 +171,7 @@ fun YourHealth(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("COVID-19 vaccine record", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("COVID-19 vaccine record", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -186,7 +187,7 @@ fun YourHealth(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("NHS COVID Pass", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("NHS COVID Pass", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -202,7 +203,7 @@ fun YourHealth(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Your health choices", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Your health choices", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
@@ -218,7 +219,7 @@ fun YourHealth(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Care plans", modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                    headlineContent = { Text("Care plans", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},

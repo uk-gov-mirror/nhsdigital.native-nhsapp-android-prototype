@@ -20,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MediumTopAppBar
@@ -64,7 +65,7 @@ fun Prescriptions(navController: NavController, modifier: Modifier) {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            MediumTopAppBar(
+            LargeTopAppBar(
                 title = {
                     Text("Request medicines", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
                 },
@@ -88,8 +89,8 @@ fun Prescriptions(navController: NavController, modifier: Modifier) {
             )
         },
         bottomBar = {
-            BottomAppBar(modifier.height(220.dp).padding(horizontal = 16.dp), containerColor = nhsGrey5, content = {
-                Column(verticalArrangement = Arrangement.Center, modifier = Modifier.padding(bottom = 64.dp)) {
+            BottomAppBar(modifier.height(150.dp).padding(horizontal = 16.dp), containerColor = nhsGrey5, content = {
+                Column() {
                 TextButton(onClick = {
                 /*TODO*/
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)

@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.prototype.demonhsapp.R
 import com.prototype.demonhsapp.ui.theme.nhsBlue
 import com.prototype.demonhsapp.ui.theme.nhsGrey4
@@ -53,7 +54,7 @@ fun Barcode(){
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                 }),
                 colors = ListItemDefaults.colors(Color.White) ,
-                headlineContent = { Text("Your prescription barcode", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 0.dp), color = nhsBlue, fontWeight = FontWeight.SemiBold) },
+                headlineContent = { Text("Your prescription barcode", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 0.dp), color = nhsBlue, fontWeight = FontWeight.SemiBold) },
                 overlineContent = { },
                 leadingContent = { if (showBarcode) { Icon(Icons.Outlined.RemoveCircleOutline, contentDescription = null, tint = nhsBlue, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))} else Icon(Icons.Outlined.AddCircleOutline, contentDescription = null, tint = nhsBlue, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                 trailingContent = { },

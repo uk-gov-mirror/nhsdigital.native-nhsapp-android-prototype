@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -86,7 +87,7 @@ fun Filter() {
                         }
                         view.playSoundEffect(SoundEffectConstants.CLICK)
                     }) { Icon(imageVector = Icons.Default.Close, contentDescription = "Close") }
-                    Text("Filter by", style = MaterialTheme.typography.titleLarge)
+                    Text("Filter by", fontSize = 24.sp, fontWeight = FontWeight.Normal)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 HorizontalDivider()

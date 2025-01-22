@@ -83,7 +83,7 @@ fun AccountButton() {
                             }
                             view.playSoundEffect(SoundEffectConstants.CLICK)
                         }) { Icon(imageVector = Icons.Default.Close, contentDescription = "Close") }
-                        Text("Account and settings", fontSize = 20.sp, fontWeight = FontWeight.Normal)
+                        Text("Account and settings", fontSize = 24.sp, fontWeight = FontWeight.Normal)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     HorizontalDivider()

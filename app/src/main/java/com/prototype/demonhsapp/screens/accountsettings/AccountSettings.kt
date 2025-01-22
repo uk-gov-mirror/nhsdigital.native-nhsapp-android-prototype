@@ -81,7 +81,7 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Manage services for another person", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Manage services for another person", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = {  },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
@@ -98,7 +98,7 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Change your contact or login details", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Change your contact or login details", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
@@ -115,7 +115,7 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Turn on fingerprint, face or iris login", modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Turn on fingerprint, face or iris login", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
@@ -132,7 +132,7 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Manage notifications", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Manage notifications", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))},
@@ -148,7 +148,7 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Manage cookies and read legal information", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Manage cookies and read legal information", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))},
@@ -164,7 +164,7 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Update your GP surgery on changes to your personal details", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Update your GP surgery on changes to your personal details", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))},
