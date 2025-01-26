@@ -39,6 +39,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.components.AccountButton
 import com.prototype.demonhsapp.components.HelpButton
+import com.prototype.demonhsapp.components.WebViewButton
 import com.prototype.demonhsapp.navigation.Routes
 import com.prototype.demonhsapp.ui.theme.nhsGrey
 import com.prototype.demonhsapp.ui.theme.nhsGrey2
@@ -158,19 +159,7 @@ fun Services(navController: NavController, modifier: Modifier) {
                     item() {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
-                                ListItem(
-                                    modifier = Modifier.clickable(onClick = {
-                                    /*TODO*/
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    }),
-                                    colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Check if you need urgent medical help using 111 online", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
-                                    leadingContent = { },
-                                    overlineContent = { },
-                                    trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2)},
-                                    supportingContent = { }
-
-                                )
+                                WebViewButton()
                                 HorizontalDivider(color = nhsGrey4)
                             }
                             Column () {

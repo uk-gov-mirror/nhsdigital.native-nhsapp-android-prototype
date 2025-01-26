@@ -74,7 +74,7 @@ fun PastPrescriptions2(navController: NavController, modifier: Modifier) {
                                     trailingContent = { },
                                     supportingContent = {
                                         Column {
-                                            Text("Prescribed on on 15 May 2024 by Dr Smith", modifier = Modifier.padding(bottom = 8.dp), color = nhsGrey)
+                                            Text("Prescribed on 15 May 2024 by Dr Smith", modifier = Modifier.padding(bottom = 8.dp), color = nhsGrey)
 
                                         }
                                     }

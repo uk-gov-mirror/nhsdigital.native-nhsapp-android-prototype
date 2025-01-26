@@ -56,7 +56,7 @@ fun WebViewButton() {
     // Remember variable which shows or hides the sheet
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     // Button which triggers the remember state variable
     ListItem(

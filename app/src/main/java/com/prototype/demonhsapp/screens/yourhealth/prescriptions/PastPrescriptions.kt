@@ -117,7 +117,7 @@ fun PastPrescriptions(navController: NavController, modifier: Modifier) {
                                     supportingContent = {
                                         Column {
                                             Text("Felodipine 2.5micrograms tablets\r\nCodeine phosphate 30mg tablets", modifier = Modifier.padding(bottom = 8.dp))
-                                            Text("Prescribed on on 15 May 2024", modifier = Modifier.padding(bottom = 8.dp), color = nhsGrey)
+                                            Text("Prescribed on 15 May 2024", modifier = Modifier.padding(bottom = 8.dp), color = nhsGrey)
 
                                         }
                                     }

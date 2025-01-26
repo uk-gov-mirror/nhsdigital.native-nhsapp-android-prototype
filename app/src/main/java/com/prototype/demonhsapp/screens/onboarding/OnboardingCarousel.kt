@@ -140,20 +140,21 @@ fun OnboardingCarousel(onFinished: () -> Unit){
 @Preview (showBackground = true, backgroundColor = 0xFFF0F4F5)
 @Composable
 fun OnboardingScreen1(){
-    Column(modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 16.dp)) {
-        Column (modifier = Modifier
-            .padding(bottom = 24.dp)
-            .height(22.dp)
-            .width(54.dp)) {
-            Image(painterResource(R.drawable.nhs_logo), contentDescription = null, contentScale = ContentScale.FillWidth)
-        }
-        Spacer(modifier = Modifier.padding(vertical = 64.dp))
+    Column(modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 16.dp), verticalArrangement = Arrangement.Bottom) {
+
 
         Column() {
-            Text("Welcome to the NHS App", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
+            Column (modifier = Modifier
+                .padding(bottom = 8.dp)
+                .height(24.dp)
+                .width(54.dp)) {
+                Image(painterResource(R.drawable.nhs_logo), contentDescription = null, contentScale = ContentScale.FillWidth)
+            }
+            Text("Welcome to the NHS App", modifier = Modifier.padding(bottom = 8.dp), fontSize = 48.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
             Text("There's a new way to navigate the app. It's now easier to find services to manage your health.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
             Text("Let's get started", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
         }
+        Spacer(modifier = Modifier.padding(vertical = 112.dp))
 
     }
 }

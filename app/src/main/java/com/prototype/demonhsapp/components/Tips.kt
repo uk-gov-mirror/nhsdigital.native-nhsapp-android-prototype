@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.prototype.demonhsapp.ui.theme.nhsBlue
+import com.prototype.demonhsapp.ui.theme.nhsGreen
 import com.prototype.demonhsapp.ui.theme.nhsPaleYellow
 import kotlinx.coroutines.launch
 
@@ -67,8 +68,8 @@ fun RichTooltipSample() {
                 scope.launch { tooltipState.show() }
                 haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                       },
-            containerColor = Color.White
+            containerColor = nhsGreen
         ) {
-            Icon(imageVector = Icons.Outlined.Medication, contentDescription = "Request new prescription", tint = nhsBlue)}
+            Icon(imageVector = Icons.Outlined.Medication, contentDescription = "Request new prescription", tint = Color.White)}
     }
 }

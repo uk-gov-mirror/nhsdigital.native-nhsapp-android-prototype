@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.QrCode
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BottomAppBar
@@ -130,7 +131,7 @@ fun PrescriptionDetailModal(){
             onDismissRequest = { showDetail = false},
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
-            //Content here
+            //Dialog content here
             val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -163,7 +164,7 @@ fun PrescriptionDetailModal(){
                                              },
                             colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)
                         ) {
-                            Row (verticalAlignment = Alignment.CenterVertically) { Icon(imageVector = Icons.Outlined.ShoppingBag, contentDescription = null)
+                            Row (verticalAlignment = Alignment.CenterVertically) { Icon(imageVector = Icons.Outlined.QrCode, contentDescription = null)
                                 Text("Show barcode", modifier = Modifier.padding(start = 8.dp), fontSize = 16.sp,)
                             }
                         }
@@ -192,7 +193,7 @@ fun PrescriptionDetailModal(){
                             // List
                             item() {
                                 Column (modifier = Modifier.padding(bottom = 24.dp)) {
-                                    Text("To be collect at Boots Pharmacy, Balham, London, SW12 773G. Phone number 080867766155", fontSize = 16.sp)
+                                    Text("To be collect at Boots Pharmacy, Balham, London, SW12 73G.\r\n Phone number 080867766155.", fontSize = 16.sp)
                                 }
                                 Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.Transparent)) {
                                     Column () {
