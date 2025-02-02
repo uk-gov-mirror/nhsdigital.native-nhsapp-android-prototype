@@ -54,6 +54,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.components.AccountButton
 import com.prototype.demonhsapp.components.CampaignCard
+import com.prototype.demonhsapp.components.ChromeCustomTab
 import com.prototype.demonhsapp.components.HelpButton
 import com.prototype.demonhsapp.components.WebViewButton
 import com.prototype.demonhsapp.navigation.Routes
@@ -144,7 +145,7 @@ fun Home(navController: NavController, modifier: Modifier) {
                                 HorizontalDivider(color = nhsGrey4)
                             }
                             Column () {
-                                WebViewButton()
+                                ChromeCustomTab()
                             }
                         }
                     }

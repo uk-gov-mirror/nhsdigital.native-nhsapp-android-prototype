@@ -14,8 +14,8 @@ android {
         applicationId = "com.prototype.demonhsapp"
         minSdk = 26
         targetSdk = 34
-        versionCode = 7
-        versionName = "7.0"
+        versionCode = 8
+        versionName = "8.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -64,6 +64,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
     implementation("androidx.compose.material:material-icons-extended-android:1.7.6")
+
+    implementation ("androidx.browser:browser:1.8.0")
 
 
 }
