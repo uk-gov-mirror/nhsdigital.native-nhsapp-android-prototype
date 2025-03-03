@@ -160,7 +160,6 @@ fun Services(navController: NavController, modifier: Modifier) {
                         Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                             Column () {
                                 WebViewButton()
-                                HorizontalDivider(color = nhsGrey4)
                             }
                             Column () {
                                 ListItem(

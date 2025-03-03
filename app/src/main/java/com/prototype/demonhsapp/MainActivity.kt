@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.prototype.demonhsapp.screens.onboarding.OnboardingCarousel
+import com.prototype.demonhsapp.screens.onboarding.OnboardingPager
 import com.prototype.demonhsapp.screens.onboarding.OnboardingUtils
 import com.prototype.demonhsapp.ui.theme.DemoNHSAppTheme
 import kotlinx.coroutines.launch
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
     private fun ShowOnboardingScreen(){
         val scope = rememberCoroutineScope()
 
-        OnboardingCarousel(){
+        OnboardingPager(){
             onboardingUtils.setOnboardingCompleted()
             scope.launch {
                 setContent {
