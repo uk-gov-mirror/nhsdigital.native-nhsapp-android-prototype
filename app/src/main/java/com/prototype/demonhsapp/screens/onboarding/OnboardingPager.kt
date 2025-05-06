@@ -152,7 +152,7 @@ fun OnboardingPager(onFinished: () -> Unit){
 fun OnboardingScreen1(){
     val configuration = LocalConfiguration.current.orientation
 
-    Column(modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Welcome to the NHS App. Before you start, here are some tips to help you find your way around." }, verticalArrangement = Arrangement.Bottom) {
+    Column(modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Welcome to the NHS App. Before you start, here are some tips to help you find your way around. Page 1 of 5. Swipe right or left with two fingers to go forward or back" }, verticalArrangement = Arrangement.Bottom) {
 
         if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
             Column(modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 48.dp)) {
@@ -194,7 +194,7 @@ fun OnboardingScreen2(){
     val configuration = LocalConfiguration.current.orientation
 
     if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you'll be able to move between areas using the menu buttons at the top and bottom of the app." }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you'll be able to move between areas using the menu buttons at the top and bottom of the app. Page 2 of 5. Swipe right or left with two fingers to go forward or back" }) {
 
             Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_menu_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
@@ -207,7 +207,7 @@ fun OnboardingScreen2(){
 
         }
     } else {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you'll be able to move between areas using the menu buttons at the top and bottom of the app." }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you'll be able to move between areas using the menu buttons at the top and bottom of the app. Page 2 of 5. Swipe right or left with two fingers to go forward or back" }) {
 
             Spacer(modifier = Modifier.padding(vertical = 48.dp))
             Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_menu_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
@@ -229,7 +229,7 @@ fun OnboardingScreen3(){
     val configuration = LocalConfiguration.current.orientation
 
     if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the services area in the bottom menu to start using NHS services or take steps to look after your health. In that area, you can request prescriptions, check for available GP appointments, find services near you and browse health information." }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the services area in the bottom menu to start using NHS services or take steps to look after your health. In that area, you can request prescriptions, check for available GP appointments, find services near you and browse health information. Page 3 of 5. Swipe right or left with two fingers to go forward or back" }) {
 
             Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_services_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
@@ -248,7 +248,7 @@ fun OnboardingScreen3(){
 
         }
     } else {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the services area in the bottom menu to start using NHS services or take steps to look after your health. In that area, you can request prescriptions, check for available GP appointments, find services near you and browse health information." }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the services area in the bottom menu to start using NHS services or take steps to look after your health. In that area, you can request prescriptions, check for available GP appointments, find services near you and browse health information. Page 3 of 5. Swipe right or left with two fingers to go forward or back" }) {
 
             Spacer(modifier = Modifier.padding(vertical = 64.dp))
             Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_services_image), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth().height(300.dp)) }
@@ -275,7 +275,7 @@ fun OnboardingScreen4(){
     val configuration = LocalConfiguration.current.orientation
 
     if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the 'your health' area in the bottom menu to view records and manage your healthcare. In that area, you can access your GP health record, manage GP and hospital appointments and check on your prescription requests." }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the 'your health' area in the bottom menu to view records and manage your healthcare. In that area, you can access your GP health record, manage GP and hospital appointments and check on your prescription requests. Page 4 of 5. Swipe right or left with two fingers to go forward or back" }) {
 
             Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_your_health_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
@@ -294,7 +294,7 @@ fun OnboardingScreen4(){
 
         }
     } else {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the 'your health' area in the bottom menu to view records and manage your healthcare. In that area, you can access your GP health record, manage GP and hospital appointments and check on your prescription requests." }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the 'your health' area in the bottom menu to view records and manage your healthcare. In that area, you can access your GP health record, manage GP and hospital appointments and check on your prescription requests. Page 4 of 5. Swipe right or left with two fingers to go forward or back" }) {
 
             Spacer(modifier = Modifier.padding(vertical = 64.dp))
             Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_your_health_image), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth().height(300.dp)) }
@@ -321,7 +321,7 @@ fun OnboardingScreen5(){
     val configuration = LocalConfiguration.current.orientation
 
     if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the messages area in the bottom menu to read messages from your healthcare services. You can turn on notifications for these in the account and settings menu area of the app. Now, you can get started. Select the 'done' button below to start using the app." }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the messages area in the bottom menu to read messages from your healthcare services. You can turn on notifications for these in the account and settings menu area of the app. Page 5 of 5. Now, you can get started. Select the 'done' button below to start using the app." }) {
 
             Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_messages_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
@@ -340,7 +340,7 @@ fun OnboardingScreen5(){
 
         }
     } else {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the messages area in the bottom menu to read messages from your healthcare services. You can turn on notifications for these in the account and settings menu area of the app. Now, you can get started. Select the 'done' button below to start using the app." }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the messages area in the bottom menu to read messages from your healthcare services. You can turn on notifications for these in the account and settings menu area of the app. Page 5 of 5. Now, you can get started. Select the 'done' button below to start using the app." }) {
 
             Spacer(modifier = Modifier.padding(vertical = 64.dp))
             Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_messages_image), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth().height(300.dp)) }
