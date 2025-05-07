@@ -133,7 +133,7 @@ fun NHSAppBar() {
 }
 
 /**
- * A sample for a simple use of small [TopAppBar].
+ * A sample for demonhsapp simple use of small [TopAppBar].
  *
  * The top app bar here does not react to any scroll events in the content under it.
  */

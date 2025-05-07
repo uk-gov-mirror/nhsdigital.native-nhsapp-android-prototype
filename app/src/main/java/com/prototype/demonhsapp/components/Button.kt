@@ -1,6 +1,5 @@
 package com.prototype.demonhsapp.components
 
-import android.view.SoundEffectConstants
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth

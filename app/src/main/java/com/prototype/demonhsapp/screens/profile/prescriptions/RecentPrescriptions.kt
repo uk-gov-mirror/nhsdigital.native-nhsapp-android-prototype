@@ -1,4 +1,4 @@
-package com.prototype.demonhsapp.screens.yourhealth.prescriptions
+package com.prototype.demonhsapp.screens.profile.prescriptions
 
 
 import androidx.compose.foundation.layout.Arrangement

@@ -1,6 +1,5 @@
 package com.prototype.demonhsapp.screens.onboarding
 
-import android.R.style
 import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -53,7 +52,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.prototype.demonhsapp.R
+import com.prototype.demonhsapp.d.R
 import com.prototype.demonhsapp.ui.theme.nhsBlack
 import com.prototype.demonhsapp.ui.theme.nhsBlue
 import com.prototype.demonhsapp.ui.theme.nhsGrey3

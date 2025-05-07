@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.prototype.demonhsapp"
+    namespace = "com.prototype.demonhsapp.d"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.prototype.demonhsapp"
+        applicationId = "com.prototype.demonhsapp.d"
         minSdk = 26
         targetSdk = 34
         versionCode = 11

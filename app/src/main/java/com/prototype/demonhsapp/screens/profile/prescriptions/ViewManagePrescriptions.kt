@@ -1,4 +1,4 @@
-package com.prototype.demonhsapp.screens.yourhealth.prescriptions
+package com.prototype.demonhsapp.screens.profile.prescriptions
 
 
 import android.view.SoundEffectConstants
@@ -23,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -146,11 +145,11 @@ fun ViewManagePrescriptions(navController: NavController, modifier: Modifier) {
                                         view.playSoundEffect(SoundEffectConstants.CLICK)
                                     }),
                                     colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Choose a pharmacy", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
+                                    headlineContent = { Text("Choose demonhsapp pharmacy", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
                                     leadingContent = { },
                                     overlineContent = { },
                                     trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp))},
-                                    supportingContent = { Text("Choose or change a pharmacy for your prescriptions to be collected or delivered from ", modifier = Modifier.padding(bottom = 8.dp)) }
+                                    supportingContent = { Text("Choose or change demonhsapp pharmacy for your prescriptions to be collected or delivered from ", modifier = Modifier.padding(bottom = 8.dp)) }
 
                                 )
                                 HorizontalDivider(color = nhsGrey4)

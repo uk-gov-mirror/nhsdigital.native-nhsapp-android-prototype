@@ -1,4 +1,4 @@
-package com.prototype.demonhsapp.screens.yourhealth.prescriptions
+package com.prototype.demonhsapp.screens.profile.prescriptions
 
 
 import android.view.SoundEffectConstants
@@ -23,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text

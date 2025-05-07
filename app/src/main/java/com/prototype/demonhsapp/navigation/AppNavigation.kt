@@ -1,6 +1,5 @@
 package com.prototype.demonhsapp.navigation
 
-import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
@@ -10,10 +9,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalHospital
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
@@ -46,24 +47,24 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.navigation.Routes.home
 import com.prototype.demonhsapp.navigation.Routes.messages
+import com.prototype.demonhsapp.navigation.Routes.profile
 import com.prototype.demonhsapp.navigation.Routes.services
-import com.prototype.demonhsapp.navigation.Routes.yourHealth
 import com.prototype.demonhsapp.screens.ScreenA
 import com.prototype.demonhsapp.screens.ScreenB
 import com.prototype.demonhsapp.screens.home.Home
 import com.prototype.demonhsapp.screens.messages.Messages
 import com.prototype.demonhsapp.screens.messages.yourmessages.MessageDetail
 import com.prototype.demonhsapp.screens.messages.yourmessages.YourMessages
+import com.prototype.demonhsapp.screens.profile.Profile
 import com.prototype.demonhsapp.screens.services.Services
 import com.prototype.demonhsapp.screens.services.prescriptions.Prescriptions
-import com.prototype.demonhsapp.screens.yourhealth.YourHealth
-import com.prototype.demonhsapp.screens.yourhealth.appointments.Referrals
-import com.prototype.demonhsapp.screens.yourhealth.appointments.UpcomingAndPastAppointments
-import com.prototype.demonhsapp.screens.yourhealth.prescriptions.CheckPrescriptions
-import com.prototype.demonhsapp.screens.yourhealth.prescriptions.PastPrescriptions
-import com.prototype.demonhsapp.screens.yourhealth.prescriptions.Prescriptions2
-import com.prototype.demonhsapp.screens.yourhealth.prescriptions.PrescriptionsDetail
-import com.prototype.demonhsapp.screens.yourhealth.prescriptions.ViewManagePrescriptions
+import com.prototype.demonhsapp.screens.profile.appointments.Referrals
+import com.prototype.demonhsapp.screens.profile.appointments.UpcomingAndPastAppointments
+import com.prototype.demonhsapp.screens.profile.prescriptions.CheckPrescriptions
+import com.prototype.demonhsapp.screens.profile.prescriptions.PastPrescriptions
+import com.prototype.demonhsapp.screens.profile.prescriptions.Prescriptions2
+import com.prototype.demonhsapp.screens.profile.prescriptions.PrescriptionsDetail
+import com.prototype.demonhsapp.screens.profile.prescriptions.ViewManagePrescriptions
 import com.prototype.demonhsapp.ui.theme.nhsBlue
 import com.prototype.demonhsapp.ui.theme.nhsGrey
 
@@ -92,8 +93,8 @@ fun AppNavigation(){
     // List of navigation bar items to loop through
     val navItemList = listOf(
         navItem ("Home", Icons.Default.Home, Icons.Outlined.Home, home, false),
-        navItem("Services", Icons.Default.LocalHospital, Icons.Outlined.LocalHospital, services, false),
-        navItem("Your health", Icons.Default.Favorite, Icons.Outlined.FavoriteBorder, yourHealth, false),
+//        navItem("Services", Icons.Default.LocalHospital, Icons.Outlined.LocalHospital, services, false),
+        navItem("Profile", Icons.Default.AccountCircle, Icons.Outlined.AccountCircle, profile, false),
         navItem("Messages", Icons.Default.Email, Icons.Outlined.Email, messages, false, 2)
     )
 
@@ -152,7 +153,7 @@ fun AppNavigation(){
                     // Main hubs
                     composable(route = Routes.home, enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Home(navController, modifier = Modifier) }
                     composable(route = Routes.services, enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Services(navController, modifier = Modifier) }
-                    composable(route = Routes.yourHealth, enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ YourHealth(navController, modifier = Modifier) }
+                    composable(route = Routes.profile, enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Profile(navController, modifier = Modifier) }
                     composable(route = Routes.messages, enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Messages(navController, modifier = Modifier) }
 
                     // Children screens

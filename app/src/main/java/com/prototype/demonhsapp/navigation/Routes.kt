@@ -7,7 +7,7 @@ object Routes {
     // Main hubs
     var home = "home"
     var services = "services"
-    var yourHealth = "yourHealth"
+    var profile = "profile"
     var messages = "messages"
     //Children screens
     var yourMessages = "yourMessages"

@@ -19,10 +19,10 @@ import com.prototype.demonhsapp.ui.theme.nhsBlue
 import com.prototype.demonhsapp.ui.theme.nhsGrey
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.screens.messages.Messages
+import com.prototype.demonhsapp.screens.profile.Profile
 import com.prototype.demonhsapp.screens.services.Services
-import com.prototype.demonhsapp.screens.yourhealth.YourHealth
 
-// These are examples with visual properties of the navigation bar. To see a full implementation with a navigation graph, see 'AppNavigation.kt' file
+// These are examples with visual properties of the navigation bar. To see demonhsapp full implementation with demonhsapp navigation graph, see 'AppNavigation.kt' file
 
 //// Custom Navigation bar
 @Preview
@@ -80,7 +80,7 @@ private fun NavView(modifier: Modifier, selectedIndex: Int){
     when(selectedIndex){
         0-> Home(rememberNavController(), modifier)
         1-> Services(rememberNavController(), modifier)
-        2-> YourHealth(rememberNavController(), modifier)
+        2-> Profile(rememberNavController(), modifier)
         3-> Messages(rememberNavController(), modifier)
     }
 }

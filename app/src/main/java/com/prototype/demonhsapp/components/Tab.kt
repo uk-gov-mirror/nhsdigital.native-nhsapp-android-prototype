@@ -15,13 +15,12 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.prototype.demonhsapp.screens.yourhealth.prescriptions.PastPrescriptions2
-import com.prototype.demonhsapp.screens.yourhealth.prescriptions.RecentPrescriptions
+import com.prototype.demonhsapp.screens.profile.prescriptions.PastPrescriptions2
+import com.prototype.demonhsapp.screens.profile.prescriptions.RecentPrescriptions
 import com.prototype.demonhsapp.ui.theme.nhsBlack
 import com.prototype.demonhsapp.ui.theme.nhsBlue
 import com.prototype.demonhsapp.ui.theme.nhsGrey5

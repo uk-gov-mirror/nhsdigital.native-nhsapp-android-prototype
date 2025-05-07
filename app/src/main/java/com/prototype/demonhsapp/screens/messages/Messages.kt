@@ -18,10 +18,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -39,6 +39,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.components.AccountButton
 import com.prototype.demonhsapp.components.HelpButton
+import com.prototype.demonhsapp.components.MessagesWebView
+import com.prototype.demonhsapp.components.ProfileWebView
 import com.prototype.demonhsapp.navigation.Routes
 import com.prototype.demonhsapp.ui.theme.nhsGrey2
 import com.prototype.demonhsapp.ui.theme.nhsGrey4
@@ -55,9 +57,9 @@ fun Messages(navController: NavController, modifier: Modifier) {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            LargeTopAppBar(
+            TopAppBar(
                 title = {
-                    Text("Messages", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
+                    Text("", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
                 },
                 navigationIcon = {
 //                    IconButton(onClick = { /* doSomething() */ }) {
@@ -85,92 +87,8 @@ fun Messages(navController: NavController, modifier: Modifier) {
 //            }
         },
         content = { values ->
-            Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize()) {
-                LazyColumn(
-                    modifier = Modifier.padding(values).padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(0.dp)
-                ) {
-                    item() {
-
-                        Column (modifier = Modifier.padding(bottom = 24.dp)) {
-                            Text("You have 4 inboxes", fontSize = 16.sp)
-                        }
-                    }
-                    //Start of section
-                    item() {
-                        Card (Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
-                            Column () {
-                                ListItem(
-                                    modifier = Modifier.clickable(onClick = {
-                                        navController.navigate(Routes.yourMessages)
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    }),
-                                    colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Your NHS healthcare services", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
-                                    leadingContent = { },
-                                    overlineContent = { Badge { Text("2") }  },
-                                    trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
-                                    // To-Do: Fix bullet point formatting
-                                    supportingContent = { Text("You may receive messages:\r\nfrom your GP surgery\r\nabout a hospital and specialist care appointments\r\nabout invitations and reminders ", modifier = Modifier.padding(bottom = 8.dp)) }
-
-                                )
-                                HorizontalDivider(color = nhsGrey4)
-                            }
-                            Column () {
-                                ListItem(
-                                    modifier = Modifier.clickable(onClick = {
-                                    /*TODO*/
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    }),
-                                    colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Your hospital and specialist doctors", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
-                                    leadingContent = { },
-                                    overlineContent = { },
-                                    trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
-                                    // To-Do: Fix bullet point formatting
-                                    supportingContent = { Text("You may send or receive messages about:\r\nyour health record\r\ndocuments and letters\r\npre-appointment questionnaires", modifier = Modifier.padding(bottom = 8.dp)) }
-
-                                )
-                                HorizontalDivider(color = nhsGrey4)
-                            }
-                            Column () {
-                                ListItem(
-                                    modifier = Modifier.clickable(onClick = {
-                                    /*TODO*/
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    }),
-                                    colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Replies to your GP requests", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
-                                    leadingContent = { },
-                                    overlineContent = { },
-                                    trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
-                                    // To-Do: Fix bullet point formatting
-                                    supportingContent = { Text("You may receive responses to queries you submitted about:\r\nhealth problems\r\nfit (sick) notes\r\ndoctor's letters ", modifier = Modifier.padding(bottom = 8.dp)) }
-
-                                )
-                                HorizontalDivider(color = nhsGrey4)
-                            }
-                            Column () {
-                                ListItem(
-                                    modifier = Modifier.clickable(onClick = {
-                                    /*TODO*/
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    }),
-                                    colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("GP surgery messaging", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
-                                    leadingContent = { },
-                                    overlineContent = { },
-                                    trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))},
-                                    supportingContent = { Text("Send and view messages from staff at your GP surgery") }
-
-                                )
-                                HorizontalDivider(color = nhsGrey4)
-                            }
-                        }
-                    }
-
-
-                }
+            Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize().padding(top = 112.dp)) {
+                MessagesWebView()
             }
         }
     )

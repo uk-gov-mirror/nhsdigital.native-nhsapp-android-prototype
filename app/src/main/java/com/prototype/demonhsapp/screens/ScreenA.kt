@@ -16,7 +16,7 @@ import com.prototype.demonhsapp.navigation.Routes
 fun ScreenA(navController: NavController, modifier: Modifier) {
     Column(modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Text("Screen A")
-        Button(onClick = { navController.navigate(Routes.yourHealth)}) { Text("Go to Screen B")}
+        Button(onClick = { navController.navigate(Routes.profile)}) { Text("Go to Screen B")}
     }
 }
 
