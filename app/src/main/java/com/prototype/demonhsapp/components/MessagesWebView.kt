@@ -20,7 +20,7 @@ fun MessagesWebView(){
 
     val context = LocalContext.current
 
-    val URL by remember { mutableStateOf("https://nhsapp-native-prototype-d94f8d65c0f8.herokuapp.com/pages/messages-p9") }
+    val URL by remember { mutableStateOf("https://nhsapp-prototype-ia-native-f519007018d8.herokuapp.com/pages-rnib/messages/your-messages") }
 
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 

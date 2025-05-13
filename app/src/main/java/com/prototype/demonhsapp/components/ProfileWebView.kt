@@ -20,7 +20,7 @@ fun ProfileWebView(){
 
     val context = LocalContext.current
 
-    val URL by remember { mutableStateOf("https://www.google.com") }
+    val URL by remember { mutableStateOf("https://nhsapp-prototype-ia-native-f519007018d8.herokuapp.com/pages-rnib/profile-p9") }
 
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 

@@ -14,8 +14,8 @@ android {
         applicationId = "com.prototype.demonhsapp.d"
         minSdk = 26
         targetSdk = 34
-        versionCode = 11
-        versionName = "11.0"
+        versionCode = 13
+        versionName = "13.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -67,8 +67,15 @@ dependencies {
 
     implementation ("androidx.browser:browser:1.8.0")
 
+    implementation("com.github.LottieFiles:dotlottie-android:0.0.3")
+
+    implementation("com.github.LottieFiles:dotlottie-android:0.5.0")
+
 
 }
+
+
+
 
 
 

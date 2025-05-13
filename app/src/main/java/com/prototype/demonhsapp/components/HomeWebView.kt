@@ -20,7 +20,7 @@ fun HomeWebView(){
 
     val context = LocalContext.current
 
-    val URL by remember { mutableStateOf("https://nhsapp-native-prototype-d94f8d65c0f8.herokuapp.com/pages/home-p9") }
+    val URL by remember { mutableStateOf("https://nhsapp-prototype-ia-native-f519007018d8.herokuapp.com/pages-rnib/home-p9") }
 
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 

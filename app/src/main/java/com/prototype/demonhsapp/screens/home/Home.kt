@@ -82,7 +82,6 @@ fun Home(navController: NavController, modifier: Modifier) {
                 navigationIcon = { },
                 actions = {
                     HelpButton()
-                    AccountButton()
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = nhsGrey5, scrolledContainerColor = nhsGrey4.copy(alpha = 0.2f)),
                 scrollBehavior = scrollBehavior
@@ -90,7 +89,7 @@ fun Home(navController: NavController, modifier: Modifier) {
         },
         bottomBar = { },
         content = { values ->
-            Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize().padding(top = 112.dp)) {
+            Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize().padding(values)) {
                 HomeWebView()
             }
         }

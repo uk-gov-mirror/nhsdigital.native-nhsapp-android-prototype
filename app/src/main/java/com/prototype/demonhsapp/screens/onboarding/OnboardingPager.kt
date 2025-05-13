@@ -24,6 +24,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Mail
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -52,9 +56,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.prototype.demonhsapp.components.LottieAnimation
+import com.prototype.demonhsapp.components.NotificationsWebView
 import com.prototype.demonhsapp.d.R
 import com.prototype.demonhsapp.ui.theme.nhsBlack
 import com.prototype.demonhsapp.ui.theme.nhsBlue
+import com.prototype.demonhsapp.ui.theme.nhsGrey
 import com.prototype.demonhsapp.ui.theme.nhsGrey3
 import com.prototype.demonhsapp.ui.theme.nhsGrey5
 import kotlinx.coroutines.launch
@@ -69,7 +76,7 @@ fun OnboardingPager(onFinished: () -> Unit){
     val haptics = LocalHapticFeedback.current
 
     // Remember page count
-    val pagerState = rememberPagerState(pageCount = {5})
+    val pagerState = rememberPagerState(pageCount = {4})
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -92,7 +99,7 @@ fun OnboardingPager(onFinished: () -> Unit){
 
                     Spacer(modifier = Modifier.padding(horizontal = 24.dp))
 
-                    if (pagerState.currentPage == 4) { TextButton(
+                    if (pagerState.currentPage == 3) { TextButton(
                         onClick = onFinished,
                         colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)) {
                         Row (verticalAlignment = Alignment.CenterVertically) {
@@ -122,7 +129,7 @@ fun OnboardingPager(onFinished: () -> Unit){
                     else if(page == 1) { OnboardingScreen2() }
                     else if(page == 2) { OnboardingScreen3() }
                     else if (page == 3) { OnboardingScreen4() }
-                    else if (page == 4) { OnboardingScreen5() }
+//                    else if (page == 4) { OnboardingScreen5() }
 
                 }
                 // Indicator
@@ -151,7 +158,7 @@ fun OnboardingPager(onFinished: () -> Unit){
 fun OnboardingScreen1(){
     val configuration = LocalConfiguration.current.orientation
 
-    Column(modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Welcome to the NHS App. Before you start, here are some tips to help you find your way around. Page 1 of 5. Swipe right or left with two fingers to go forward or back" }, verticalArrangement = Arrangement.Bottom) {
+    Column(modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Welcome to the NHS App. Before you start, here are some tips about using the app. Page 1 of 4. Swipe right or left with two fingers to go forward or back" }, verticalArrangement = Arrangement.Bottom) {
 
         if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
             Column(modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 48.dp)) {
@@ -163,7 +170,7 @@ fun OnboardingScreen1(){
                 }
                 Column {
                     Text("Welcome to the NHS App", modifier = Modifier.padding(bottom = 8.dp), fontSize = 48.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                    Text("Before you start, here are some tips about finding your way around.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                    Text("Before you start, here are some tips about using the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
                 }
             }
             Spacer(modifier = Modifier.padding(vertical = 112.dp))
@@ -177,7 +184,7 @@ fun OnboardingScreen1(){
                 }
                 Column {
                     Text("Welcome to the NHS App", modifier = Modifier.padding(bottom = 8.dp), fontSize = 48.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                    Text("Before you start, here are some tips about finding your way around.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                    Text("Before you start, here are some tips about using the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
                 }
             }
             Spacer(modifier = Modifier.padding(vertical = 112.dp))
@@ -193,27 +200,27 @@ fun OnboardingScreen2(){
     val configuration = LocalConfiguration.current.orientation
 
     if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you'll be able to move between areas using the menu buttons at the top and bottom of the app. Page 2 of 5. Swipe right or left with two fingers to go forward or back" }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you can use the menu buttons at the bottom of the screen to move between the 3 main areas of the app. Page 2 of 4. Swipe right or left with two fingers to go forward or back" }) {
 
             Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_menu_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
+                Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_teste_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
 
                 Column(modifier = Modifier.padding(start = 16.dp)) {
                     Text("Moving around", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                    Text("Use the menus at the top and bottom of the screen to reach different areas of the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                    Text("Use the menus at the bottom of the screen to move between the 3 main areas of the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
                 }
             }
 
         }
     } else {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you'll be able to move between areas using the menu buttons at the top and bottom of the app. Page 2 of 5. Swipe right or left with two fingers to go forward or back" }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you can use the menu buttons at the bottom of the screen to move between the 3 main areas of the app. Page 2 of 4. Swipe right or left with two fingers to go forward or back" }) {
 
-            Spacer(modifier = Modifier.padding(vertical = 48.dp))
-            Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_menu_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_teste_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
 
             Column() {
                 Text("Moving around", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                Text("Use the menus at the top and bottom of the screen to reach different areas of the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                Text("Use the menus at the bottom of the screen to move between the 3 main areas of the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
             }
 
         }
@@ -228,39 +235,138 @@ fun OnboardingScreen3(){
     val configuration = LocalConfiguration.current.orientation
 
     if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the services area in the bottom menu to start using NHS services or take steps to look after your health. In that area, you can request prescriptions, check for available GP appointments, find services near you and browse health information. Page 3 of 5. Swipe right or left with two fingers to go forward or back" }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Now, we'll explain what you can do in the 3 main areas of the app. In home, you can manage your prescriptions, appointments, vaccinations and other NHS support. In profile, you can check your personal details and settings. Finally, in messages, you can read messages from your healthcare services. Page 3 of 4. Swipe right or left with two fingers to go forward or back." }) {
 
             Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_services_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
+                Column(modifier = Modifier.width(256.dp)) { LottieAnimation() }
 
                 Column(modifier = Modifier.padding(start = 16.dp)) {
-                    Text("Services", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                    val multipleLineText = buildAnnotatedString {
-                        append("Select ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) { append("Services")}
-                        append(" to start using NHS services or take steps to look after your health.")
+                    Column(modifier = Modifier.padding(bottom = 24.dp)) {
+                        Row {
+                            Icon(
+                                imageVector = Icons.Default.Home,
+                                contentDescription = null,
+                                tint = nhsBlue,
+                                modifier = Modifier.size(34.dp)
+                            )
+                            Column (modifier = Modifier.padding(start = 8.dp)) {
+//                      Text("Home", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                                val multipleLineText = buildAnnotatedString {
+                                    append("Manage prescriptions, appointments, vaccinations and other NHS support in ")
+                                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold, color = nhsBlue)) { append("home")}
+                                    append("")
+                                }
+                                Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+
+                            }
+                        }
                     }
-                    Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-                    Text("You can: \n• request repeat prescriptions \n• check for available GP appointments \n• find services near you \n• browse health information", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                    Column(modifier = Modifier.padding(bottom = 24.dp)) {
+                        Row {
+                            Icon(
+                                imageVector = Icons.Default.AccountCircle,
+                                contentDescription = null,
+                                tint = nhsBlue,
+                                modifier = Modifier.size(34.dp)
+                            )
+                            Column (modifier = Modifier.padding(start = 8.dp)) {
+//                        Text("Profile", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                                val multipleLineText = buildAnnotatedString {
+                                    append("Check your personal details and settings in ")
+                                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold, color = nhsBlue)) { append("profiles")}
+                                    append("")
+                                }
+                                Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                            }
+                        }
+                    }
+                    Column(modifier = Modifier.padding(bottom = 24.dp)) {
+                        Row {
+                            Icon(
+                                imageVector = Icons.Default.Mail,
+                                contentDescription = null,
+                                tint = nhsBlue,
+                                modifier = Modifier.size(34.dp)
+                            )
+                            Column (modifier = Modifier.padding(start = 8.dp)) {
+//                        Text("Messages", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                                val multipleLineText = buildAnnotatedString {
+                                    append("Read communications from your healthcare services in ")
+                                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold, color = nhsBlue)) { append("messages")}
+                                    append("")
+                                }
+                                Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                            }
+                        }
+                    }
                 }
             }
 
         }
     } else {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the services area in the bottom menu to start using NHS services or take steps to look after your health. In that area, you can request prescriptions, check for available GP appointments, find services near you and browse health information. Page 3 of 5. Swipe right or left with two fingers to go forward or back" }) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Now, we'll explain what you can do in the 3 main areas of the app. In home, you can manage your prescriptions, appointments, vaccinations and other NHS support. In profile, you can check your personal details and settings. Finally, in messages, you can read messages from your healthcare services. Page 3 of 4. Swipe right or left with two fingers to go forward or back." }) {
 
-            Spacer(modifier = Modifier.padding(vertical = 64.dp))
-            Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_services_image), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth().height(300.dp)) }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-            Column() {
-                Text("Services", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                val multipleLineText = buildAnnotatedString {
-                    append("Select ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) { append("Services")}
-                    append(" to start using NHS services or take steps to look after your health.")
+            Column(modifier = Modifier.fillMaxSize().height(524.dp)) { LottieAnimation() }
+
+            Column(modifier = Modifier.padding(bottom = 24.dp)) {
+              Row {
+                  Icon(
+                      imageVector = Icons.Default.Home,
+                      contentDescription = null,
+                      tint = nhsBlue,
+                      modifier = Modifier.size(34.dp)
+                  )
+                  Column (modifier = Modifier.padding(start = 8.dp)) {
+//                      Text("Home", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                      val multipleLineText = buildAnnotatedString {
+                          append("Manage prescriptions, appointments, vaccinations and other NHS support in ")
+                          withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold, color = nhsBlue)) { append("home")}
+                          append("")
+                      }
+                      Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+
+                  }
+              }
+            }
+            Column(modifier = Modifier.padding(bottom = 24.dp)) {
+                Row {
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = null,
+                        tint = nhsBlue,
+                        modifier = Modifier.size(34.dp)
+                    )
+                    Column (modifier = Modifier.padding(start = 8.dp)) {
+//                        Text("Profile", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                        val multipleLineText = buildAnnotatedString {
+                            append("Check your personal details and settings in ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold, color = nhsBlue)) { append("profiles")}
+                            append("")
+                        }
+                        Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                    }
                 }
-                Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-                Text("You can: \n• request repeat prescriptions \n• check for available GP appointments \n• find services near you \n• browse health information", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+            }
+            Column(modifier = Modifier.padding(bottom = 24.dp)) {
+                Row {
+                    Icon(
+                        imageVector = Icons.Default.Mail,
+                        contentDescription = null,
+                        tint = nhsBlue,
+                        modifier = Modifier.size(34.dp)
+                    )
+                    Column (modifier = Modifier.padding(start = 8.dp)) {
+//                        Text("Messages", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                        val multipleLineText = buildAnnotatedString {
+                            append("Read communications from your healthcare services in ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold, color = nhsBlue)) { append("messages")}
+                            append("")
+                        }
+                        Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+                    }
+                }
             }
 
         }
@@ -270,94 +376,54 @@ fun OnboardingScreen3(){
 @Preview (showBackground = true, backgroundColor = 0xFFF0F4F5)
 @Composable
 fun OnboardingScreen4(){
-    val scrollState = rememberScrollState()
-    val configuration = LocalConfiguration.current.orientation
-
-    if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the 'your health' area in the bottom menu to view records and manage your healthcare. In that area, you can access your GP health record, manage GP and hospital appointments and check on your prescription requests. Page 4 of 5. Swipe right or left with two fingers to go forward or back" }) {
-
-            Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_your_health_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
-
-                Column(modifier = Modifier.padding(start = 16.dp)) {
-                    Text("Your Health", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                    val multipleLineText = buildAnnotatedString {
-                        append("Select ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) { append("Your Health")}
-                        append(" to view records and manage your healthcare.")
-                    }
-                    Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-                    Text("You can: \n• access your GP health record \n• manage GP and hospital appointments \n• check on your prescription requests ", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-                }
-            }
-
-        }
-    } else {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the 'your health' area in the bottom menu to view records and manage your healthcare. In that area, you can access your GP health record, manage GP and hospital appointments and check on your prescription requests. Page 4 of 5. Swipe right or left with two fingers to go forward or back" }) {
-
-            Spacer(modifier = Modifier.padding(vertical = 64.dp))
-            Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_your_health_image), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth().height(300.dp)) }
-
-            Column() {
-                Text("Your Health", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                val multipleLineText = buildAnnotatedString {
-                    append("Select ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) { append("Your Health")}
-                    append(" to view records and manage your healthcare.")
-                }
-                Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-                Text("You can: \n• access your GP health record \n• manage GP and hospital appointments \n• check on your prescription requests ", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-            }
-
-        }
-    }
+    NotificationsWebView()
 }
 
-@Preview (showBackground = true, backgroundColor = 0xFFF0F4F5)
-@Composable
-fun OnboardingScreen5(){
-    val scrollState = rememberScrollState()
-    val configuration = LocalConfiguration.current.orientation
-
-    if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the messages area in the bottom menu to read messages from your healthcare services. You can turn on notifications for these in the account and settings menu area of the app. Page 5 of 5. Now, you can get started. Select the 'done' button below to start using the app." }) {
-
-            Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_messages_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
-
-                Column(modifier = Modifier.padding(start = 16.dp)) {
-                    Text("Messages", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                    val multipleLineText = buildAnnotatedString {
-                        append("Select ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) { append("Messages")}
-                        append(" to read messages from your healthcare services.")
-                    }
-                    Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-                    Text("You can turn on notifications for these in the account and settings area of the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-                }
-            }
-
-        }
-    } else {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the messages area in the bottom menu to read messages from your healthcare services. You can turn on notifications for these in the account and settings menu area of the app. Page 5 of 5. Now, you can get started. Select the 'done' button below to start using the app." }) {
-
-            Spacer(modifier = Modifier.padding(vertical = 64.dp))
-            Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_messages_image), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth().height(300.dp)) }
-
-            Column() {
-                Text("Messages", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
-                val multipleLineText = buildAnnotatedString {
-                    append("Select ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) { append("Messages")}
-                    append(" to read messages from your healthcare services.")
-                }
-                Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-                Text("You can turn on notifications for these in the account and settings area of the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
-            }
-
-        }
-    }
-}
+//@Preview (showBackground = true, backgroundColor = 0xFFF0F4F5)
+//@Composable
+//fun OnboardingScreen5(){
+//    val scrollState = rememberScrollState()
+//    val configuration = LocalConfiguration.current.orientation
+//
+//    if (configuration == Configuration.ORIENTATION_LANDSCAPE) {
+//        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "Use the messages area in the bottom menu to read messages from your healthcare services. You can turn on notifications for these in the account and settings menu area of the app. Page 5 of 5. Now, you can get started. Select the 'done' button below to start using the app." }) {
+//
+//            Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
+//                Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_messages_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
+//
+//                Column(modifier = Modifier.padding(start = 16.dp)) {
+//                    Text("Messages", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
+//                    val multipleLineText = buildAnnotatedString {
+//                        append("Select ")
+//                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) { append("Messages")}
+//                        append(" to read messages from your healthcare services.")
+//                    }
+//                    Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+//                    Text("You can turn on notifications for these in the account and settings area of the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+//                }
+//            }
+//
+//        }
+//    } else {
+//        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "Use the messages area in the bottom menu to read messages from your healthcare services. You can turn on notifications for these in the account and settings menu area of the app. Page 5 of 5. Now, you can get started. Select the 'done' button below to start using the app." }) {
+//
+//            Spacer(modifier = Modifier.padding(vertical = 64.dp))
+//            Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_messages_image), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth().height(300.dp)) }
+//
+//            Column() {
+//                Text("Messages", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
+//                val multipleLineText = buildAnnotatedString {
+//                    append("Select ")
+//                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) { append("Messages")}
+//                    append(" to read messages from your healthcare services.")
+//                }
+//                Text(multipleLineText, fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+//                Text("You can turn on notifications for these in the account and settings area of the app.", fontSize = 16.sp, color = nhsBlack, modifier = Modifier.padding(bottom = 8.dp))
+//            }
+//
+//        }
+//    }
+//}
 
 
 @Preview (showBackground = true, backgroundColor = 0xFFF0F4F5)
