@@ -67,6 +67,10 @@ dependencies {
 
     implementation ("androidx.browser:browser:1.8.0")
 
+    implementation("com.github.LottieFiles:dotlottie-android:0.0.3")
+
+    implementation("com.github.LottieFiles:dotlottie-android:0.5.0")
+
 
 }
 
