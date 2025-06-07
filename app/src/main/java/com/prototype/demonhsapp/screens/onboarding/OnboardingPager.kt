@@ -69,6 +69,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.prototype.demonhsapp.R
+import com.prototype.demonhsapp.components.LottieAnimation
 import com.prototype.demonhsapp.ui.theme.nhsBlack
 import com.prototype.demonhsapp.ui.theme.nhsBlue
 import com.prototype.demonhsapp.ui.theme.nhsGrey3
@@ -88,6 +89,20 @@ fun OnboardingPager(onFinished: () -> Unit){
     // Remember page count
     val pagerState = rememberPagerState(pageCount = {3})
     val coroutineScope = rememberCoroutineScope()
+
+    // Track current page for accessibility reset
+    val previousPage = remember { mutableStateOf(0) }
+
+    // Reset accessibility traversal when page changes
+    LaunchedEffect(pagerState.currentPage) {
+        if (previousPage.value != pagerState.currentPage) {
+            // Clear any existing focus
+            view.clearFocus()
+            // Small delay to ensure page transition is complete
+            kotlinx.coroutines.delay(100)
+            previousPage.value = pagerState.currentPage
+        }
+    }
 
     Scaffold(
         topBar = { },
@@ -213,7 +228,8 @@ fun OnboardingScreen2(){
         Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 48.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you can use the menu at the bottom of the screen to move between the main areas. Page 2 of 3. Swipe right or left with two fingers to go forward or back" }) {
 
             Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_menu_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
+//                Column(modifier = Modifier.width(256.dp)) { Image(painterResource(R.drawable.app_menu_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
+                Column(modifier = Modifier.width(256.dp)) { LottieAnimation() }
 
                 Column(modifier = Modifier.padding(start = 16.dp)) {
                     Text("Moving around", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
@@ -225,8 +241,9 @@ fun OnboardingScreen2(){
     } else {
         Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 24.dp, horizontal = 16.dp).clearAndSetSemantics { contentDescription = "When you start using the app, you can use the menu at the bottom of the screen to move between the main areas. Page 2 of 3. Swipe right or left with two fingers to go forward or back" }) {
 
-            Spacer(modifier = Modifier.padding(vertical = 48.dp))
-            Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_menu_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+//            Column(modifier = Modifier.fillMaxWidth()) { Image(painterResource(R.drawable.app_menu_image), contentDescription = null, contentScale = ContentScale.FillWidth, modifier = Modifier.padding(vertical = 24.dp).fillMaxWidth()) }
+            Column(modifier = Modifier.fillMaxSize().height(524.dp).padding(bottom = 16.dp)) { LottieAnimation() }
 
             Column() {
                 Text("Moving around", modifier = Modifier.padding(bottom = 8.dp), fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
@@ -257,9 +274,10 @@ fun OnboardingScreen3(isCurrentPage: Boolean = true){
                 // Handle any focus request failures gracefully
             }
         }
-        // Reset the flag when leaving the page
+        // Reset the flag and clear focus when leaving the page
         if (!isCurrentPage) {
             hasFocused.value = false
+            focusRequester.freeFocus()
         }
     }
 
@@ -272,7 +290,7 @@ fun OnboardingScreen3(isCurrentPage: Boolean = true){
                 Column(modifier = Modifier.padding(start = 16.dp)) {
                     Text("What you can do in the app", modifier = Modifier.padding(bottom = 24.dp).focusRequester(focusRequester).focusable().semantics {
                         traversalIndex = 0f
-                        contentDescription = "What you can do in the app"
+                        contentDescription = "Here's what you can do in the app"
                         heading()
                     }, fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
                     Column(modifier = Modifier.padding(bottom = 24.dp).clearAndSetSemantics { traversalIndex = 1f
@@ -330,11 +348,11 @@ fun OnboardingScreen3(isCurrentPage: Boolean = true){
 
             Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-            //            Column(modifier = Modifier.fillMaxSize().height(524.dp)) { LottieAnimation() }
+//             Column(modifier = Modifier.fillMaxSize().height(524.dp)) { LottieAnimation() }
 
             Text("What you can do in the app", modifier = Modifier.padding(bottom = 24.dp).focusRequester(focusRequester).focusable().semantics {
                 traversalIndex = 0f
-                contentDescription = "What you can do in the app"
+                contentDescription = "Here's what you can do in the app"
                 heading()
             }, fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = nhsBlack)
             Column(modifier = Modifier.padding(bottom = 24.dp).clearAndSetSemantics { traversalIndex = 1f
