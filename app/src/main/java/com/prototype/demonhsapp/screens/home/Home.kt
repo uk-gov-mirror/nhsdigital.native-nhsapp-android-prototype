@@ -1,14 +1,19 @@
 package com.prototype.demonhsapp.screens.home
 
 import android.view.SoundEffectConstants
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import com.prototype.demonhsapp.R
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -29,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -37,9 +43,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -50,6 +59,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.components.AccountButton
@@ -63,6 +73,8 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey
 import com.prototype.demonhsapp.ui.theme.nhsGrey2
 import com.prototype.demonhsapp.ui.theme.nhsGrey4
 import com.prototype.demonhsapp.ui.theme.nhsGrey5
+import com.prototype.demonhsapp.ui.theme.nhsPurple
+import com.prototype.demonhsapp.ui.theme.nhsYellow
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,48 +89,50 @@ fun Home(navController: NavController, modifier: Modifier) {
         topBar = {
             LargeTopAppBar(
                 title = {
-                    Text("", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
+//                    val collapsedFraction = scrollBehavior.state.collapsedFraction
+//                    val titleAlpha by animateFloatAsState(if (collapsedFraction > 0.2f) 1f else 0f)
+//                    Text("Home", modifier = Modifier.alpha(titleAlpha), maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
                 },
                 navigationIcon = { },
                 actions = {
                     HelpButton()
                     AccountButton()
                 },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = nhsGrey5, scrolledContainerColor = nhsGrey4.copy(alpha = 0.2f)),
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent
+                ),
                 scrollBehavior = scrollBehavior
             )
         },
         bottomBar = { },
         content = { values ->
-            Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.fillMaxSize().background(nhsGrey5)) {
+                val collapseFraction = scrollBehavior.state.collapsedFraction
+
+                val headerAlpha by animateFloatAsState(1f - collapseFraction * 1.2f)
+                val headerTranslationY = -collapseFraction * 150f
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(280.dp)
+                        .graphicsLayer {
+                            translationY = headerTranslationY
+                            alpha = headerAlpha
+                        }
+                        .padding(horizontal = 16.dp).padding(top = 128.dp)
+                        .zIndex(-1f)
+                ){
+                    Header()
+                }
 
                 LazyColumn(
                     modifier = Modifier
                         .padding(values)
                         .padding(horizontal = 16.dp),
+                    contentPadding = PaddingValues(top = 96.dp, bottom = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(0.dp)
                 ) {
-                    // NHS logo and welcome message
-                    item() {
-
-                        Column (modifier = Modifier
-                            .padding(bottom = 24.dp)
-                            .height(22.dp)
-                            .width(54.dp)) {
-                            Image(painterResource(R.drawable.nhs_logo), contentDescription = null, contentScale = ContentScale.FillWidth)
-                        }
-                    }
-                    item() {
-
-                        Column (modifier = Modifier.padding(bottom = 24.dp)) {
-                            Text("Good evening,", fontSize = 18.sp)
-                            Text("Mary Swanson", fontSize = 32.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(bottom = 8.dp))
-                            Row {
-                                Text("NHS number: ", fontSize = 18.sp, color = nhsGrey)
-                                Text("123 456 7890", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = nhsBlue)
-                            }
-                        }
-                    }
                     //Section title
                     item() {
                         Column (modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
@@ -288,6 +302,22 @@ fun Home(navController: NavController, modifier: Modifier) {
     )
 }
 
+@Composable
+private fun Header(){
+    Column (modifier = Modifier.padding(bottom = 16.dp)) {
+        // NHS logo and welcome message
+        Image(modifier = Modifier
+            .padding(bottom = 24.dp)
+            .height(22.dp)
+            .width(54.dp),painter = painterResource(R.drawable.nhs_logo), contentDescription = null, contentScale = ContentScale.FillWidth)
+        Text("Good evening,", fontSize = 18.sp)
+        Text("Mary Swanson", fontSize = 32.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(bottom = 8.dp))
+        Row {
+            Text("NHS number: ", fontSize = 18.sp, color = nhsGrey)
+            Text("123 456 7890", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = nhsBlue)
+        }
+    }
+}
 @Preview (showSystemUi = true, backgroundColor = 0xFFF0F4F5)
 @Composable
 fun HomePreview() {
