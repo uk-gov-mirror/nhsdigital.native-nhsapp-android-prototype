@@ -107,7 +107,7 @@ fun Home(navController: NavController, modifier: Modifier) {
         },
         bottomBar = { },
         content = { values ->
-            Box(modifier = Modifier.fillMaxSize().background(nhsGrey5)) {
+            Box(modifier = Modifier.fillMaxSize().background(nhsBlue)) {
                 val collapseFraction = scrollBehavior.state.collapsedFraction
 
                 val headerAlpha by animateFloatAsState(1f - collapseFraction * 1.2f)
@@ -303,21 +303,52 @@ fun Home(navController: NavController, modifier: Modifier) {
 }
 
 @Composable
-private fun Header(){
-    Column (modifier = Modifier.padding(bottom = 16.dp)) {
+private fun Header(modifier: Modifier = Modifier){
+    Column (
+        modifier = modifier
+            .fillMaxSize()
+            .background(nhsBlue)
+            .padding(bottom = 16.dp)
+    ) {
         // NHS logo and welcome message
-        Image(modifier = Modifier
-            .padding(bottom = 24.dp)
-            .height(22.dp)
-            .width(54.dp),painter = painterResource(R.drawable.nhs_logo), contentDescription = null, contentScale = ContentScale.FillWidth)
-        Text("Good evening,", fontSize = 18.sp)
-        Text("Mary Swanson", fontSize = 32.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(bottom = 8.dp))
+        Image(
+            modifier = Modifier
+                .padding(bottom = 24.dp)
+                .height(22.dp)
+                .width(54.dp),
+            painter = painterResource(R.drawable.nhs_logo_2),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth
+        )
+        Text("Good evening,", fontSize = 18.sp, color = Color.White)
+        Text(
+            "Mary Swanson",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(bottom = 8.dp),
+            color = Color.White
+        )
         Row {
-            Text("NHS number: ", fontSize = 18.sp, color = nhsGrey)
-            Text("123 456 7890", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = nhsBlue)
+            Text("NHS number: ", fontSize = 18.sp, color = Color.White.copy(alpha = 0.7f))
+            Text("123 456 7890", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
         }
     }
 }
+//private fun Header(){
+//    Column (modifier = Modifier.padding(bottom = 16.dp)) {
+//        // NHS logo and welcome message
+//        Image(modifier = Modifier
+//            .padding(bottom = 24.dp)
+//            .height(22.dp)
+//            .width(54.dp),painter = painterResource(R.drawable.nhs_logo), contentDescription = null, contentScale = ContentScale.FillWidth)
+//        Text("Good evening,", fontSize = 18.sp)
+//        Text("Mary Swanson", fontSize = 32.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(bottom = 8.dp))
+//        Row {
+//            Text("NHS number: ", fontSize = 18.sp, color = nhsGrey)
+//            Text("123 456 7890", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = nhsBlue)
+//        }
+//    }
+//}
 @Preview (showSystemUi = true, backgroundColor = 0xFFF0F4F5)
 @Composable
 fun HomePreview() {
