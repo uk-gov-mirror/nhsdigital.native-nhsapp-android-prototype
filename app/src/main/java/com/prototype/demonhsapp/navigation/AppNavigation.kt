@@ -44,15 +44,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.prototype.demonhsapp.navigation.Routes.home
-import com.prototype.demonhsapp.navigation.Routes.messages
-import com.prototype.demonhsapp.navigation.Routes.services
-import com.prototype.demonhsapp.navigation.Routes.yourHealth
+import androidx.navigation.navArgument
+import androidx.navigation.NavType
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prototype.demonhsapp.viewmodels.MessagesViewModel
 import com.prototype.demonhsapp.screens.ScreenA
 import com.prototype.demonhsapp.screens.ScreenB
 import com.prototype.demonhsapp.screens.home.Home
 import com.prototype.demonhsapp.screens.messages.Messages
-import com.prototype.demonhsapp.screens.messages.yourmessages.MessageDetail
+import com.prototype.demonhsapp.screens.messages.MessageDetail
 import com.prototype.demonhsapp.screens.messages.yourmessages.YourMessages
 import com.prototype.demonhsapp.screens.services.Services
 import com.prototype.demonhsapp.screens.services.prescriptions.Prescriptions
@@ -75,6 +75,9 @@ fun AppNavigation(){
     val view = LocalView.current
     val haptics = LocalHapticFeedback.current
 
+    // Messages ViewModel for shared state
+    val messagesViewModel: MessagesViewModel = viewModel()
+
     //data class which defines variables for the list
 
     data class navItem<T : Any> (
@@ -91,10 +94,11 @@ fun AppNavigation(){
 
     // List of navigation bar items to loop through
     val navItemList = listOf(
-        navItem ("Home", Icons.Default.Home, Icons.Outlined.Home, home, false),
-        navItem("Services", Icons.Default.LocalHospital, Icons.Outlined.LocalHospital, services, false),
-        navItem("Your health", Icons.Default.Favorite, Icons.Outlined.FavoriteBorder, yourHealth, false),
-        navItem("Messages", Icons.Default.Email, Icons.Outlined.Email, messages, false, 2)
+        navItem ("Home", Icons.Default.Home, Icons.Outlined.Home, "home", false),
+        navItem("Services", Icons.Default.LocalHospital, Icons.Outlined.LocalHospital, "services", false),
+        navItem("Your health", Icons.Default.Favorite, Icons.Outlined.FavoriteBorder, "your_health", false),
+        navItem("Messages", Icons.Default.Email, Icons.Outlined.Email, "messages", false,
+            if (messagesViewModel.unreadCount > 0) messagesViewModel.unreadCount else null)
     )
 
     // remember the state of the navigation bar item
@@ -121,7 +125,7 @@ fun AppNavigation(){
                             }
 //                            view.playSoundEffect(SoundEffectConstants.CLICK)
                             haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                  },
+                        },
                         icon = { BadgedBox(badge = { if (navItem.badgeCount != null) {Badge{ Text(text = navItem.badgeCount.toString()) }} else if (navItem.hasNews) { Badge() } }) { Icon(imageVector = if (index == selectedIndex) {navItem.selectedIcon} else navItem.unselectedIcon, contentDescription = null) } },
                         label = { Text(text = navItem.label)},
                         colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey)
@@ -133,12 +137,8 @@ fun AppNavigation(){
             // Map the navigation host to specific screens
             NavHost(
                 navController = navController,
-                startDestination = Routes.home,
+                startDestination = "home",
                 modifier = Modifier.padding(bottom = 88.dp),
-//        enterTransition = { fadeIn(animationSpec = tween(700, easing = LinearEasing)) + slideIntoContainer(animationSpec = tween(300, easing = EaseIn), towards = AnimatedContentTransitionScope.SlideDirection.Start) },
-//        exitTransition = { fadeOut(animationSpec = tween(700, easing = LinearEasing)) + slideOutOfContainer(animationSpec = tween(300, easing = EaseOut), towards = AnimatedContentTransitionScope.SlideDirection.End) },
-//        popEnterTransition = { fadeIn(animationSpec = tween(700, easing = LinearEasing)) + slideIntoContainer(animationSpec = tween(300, easing = EaseIn), towards = AnimatedContentTransitionScope.SlideDirection.End) },
-//        popExitTransition = { fadeOut(animationSpec = tween(700, easing = LinearEasing)) + slideOutOfContainer(animationSpec = tween(300, easing = EaseOut), towards = AnimatedContentTransitionScope.SlideDirection.Start) },
                 enterTransition = { slideIntoContainer(animationSpec = tween(300, easing = EaseIn), towards = AnimatedContentTransitionScope.SlideDirection.Start) },
                 exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) },
                 popEnterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) },
@@ -150,10 +150,10 @@ fun AppNavigation(){
                     composable(route = Routes.screenB){ ScreenB() }
 
                     // Main hubs
-                    composable(route = Routes.home, enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Home(navController, modifier = Modifier) }
-                    composable(route = Routes.services, enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Services(navController, modifier = Modifier) }
-                    composable(route = Routes.yourHealth, enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ YourHealth(navController, modifier = Modifier) }
-                    composable(route = Routes.messages, enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Messages(navController, modifier = Modifier) }
+                    composable(route = "home", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Home(navController, modifier = Modifier) }
+                    composable(route = "services", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Services(navController, modifier = Modifier) }
+                    composable(route = "your_health", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ YourHealth(navController, modifier = Modifier) }
+                    composable(route = "messages", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Messages(navController, messagesViewModel, modifier = Modifier) }
 
                     // Children screens
                     composable(route = Routes.yourMessages){ YourMessages(navController) }
@@ -165,17 +165,26 @@ fun AppNavigation(){
                     composable(route = Routes.prescriptionsDetail){ PrescriptionsDetail(navController, modifier = Modifier) }
                     composable(route = Routes.upcomingAndAastAppointments){ UpcomingAndPastAppointments(navController, modifier = Modifier) }
                     composable(route = Routes.referrals){ Referrals(navController, modifier = Modifier) }
-                    composable(route = Routes.messageDetail){ MessageDetail(navController, modifier = Modifier) }
 
-                    // Independent screens
-
+                    // Message Detail with argument
+                    composable(
+                        route = "message_detail/{messageId}",
+                        arguments = listOf(
+                            navArgument("messageId") {
+                                type = NavType.StringType
+                            }
+                        )
+                    ) { backStackEntry ->
+                        val messageId = backStackEntry.arguments?.getString("messageId") ?: ""
+                        MessageDetail(
+                            navController = navController,
+                            messageId = messageId
+                        )
+                    }
                 }
             )
         }
     )
-
-
-
 }
 
 @Preview (showSystemUi = true, backgroundColor = 0xFFF0F4F5)

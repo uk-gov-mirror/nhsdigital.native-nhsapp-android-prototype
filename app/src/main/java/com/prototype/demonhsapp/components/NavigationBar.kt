@@ -81,7 +81,7 @@ private fun NavView(modifier: Modifier, selectedIndex: Int){
         0-> Home(rememberNavController(), modifier)
         1-> Services(rememberNavController(), modifier)
         2-> YourHealth(rememberNavController(), modifier)
-        3-> Messages(rememberNavController(), modifier)
+//        3-> Messages(rememberNavController(), modifier)
     }
 }
 

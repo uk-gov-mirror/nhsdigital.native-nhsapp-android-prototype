@@ -71,8 +71,15 @@ dependencies {
 
     implementation("com.github.LottieFiles:dotlottie-android:0.5.0")
 
+    // Lifecycle ViewModel for Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
+    // If not already present, also add:
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+
 
 }
+
 
 
 

@@ -8,10 +8,8 @@ object Routes {
     var home = "home"
     var services = "services"
     var yourHealth = "yourHealth"
-    var messages = "messages"
     //Children screens
     var yourMessages = "yourMessages"
-    var messageDetail = "messageDetail"
     var prescriptions = "prescriptions"
     var prescriptions2 = "prescriptions2"
     var viewManagePrescriptions = "viewManagePrescriptions"
@@ -23,4 +21,12 @@ object Routes {
 
     // Independent screens
     var accountsettings = "accountSettings"
+
+    // ... your existing routes ...Messages
+
+    const val messages = "messages"
+    const val messageDetail = "message_detail/{messageId}"
+
+    // Helper function to create route with message ID
+    fun messageDetailRoute(messageId: String) = "message_detail/$messageId"
 }

@@ -51,44 +51,58 @@ import com.prototype.demonhsapp.ui.theme.nhsGrey4
 import com.prototype.demonhsapp.ui.theme.nhsGrey5
 import kotlinx.coroutines.launch
 
-@Preview (showBackground = true, backgroundColor = 0xFFF0F4F5)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChromeCustomTab() {
-
+fun ChromeCustomTab(
+    text: String,
+    url: String,
+    showDivider: Boolean = true,
+    modifier: Modifier = Modifier
+) {
     // Sound effects and haptics
     val view = LocalView.current
     val haptics = LocalHapticFeedback.current
     val ctx = LocalContext.current
 
+    Column {
+        // Button which triggers the remember state variable
+        ListItem(
+            modifier = modifier.clickable(onClick = {
+                openTab(ctx, url)
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+            }),
+            colors = ListItemDefaults.colors(Color.White),
+            headlineContent = {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+                )
+            },
+            leadingContent = { },
+            overlineContent = { },
+            trailingContent = {
+                Icon(
+                    Icons.AutoMirrored.Outlined.OpenInNew,
+                    contentDescription = null,
+                    tint = nhsGrey2
+                )
+            },
+            supportingContent = { }
+        )
 
-    // Button which triggers the remember state variable
-    ListItem(
-        modifier = Modifier.clickable(onClick = {
-            openTab(ctx)
-            view.playSoundEffect(SoundEffectConstants.CLICK)
-        }),
-        colors = ListItemDefaults.colors(Color.White) ,
-        headlineContent = { Text("Check if you need urgent medical help using 111 online", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
-        leadingContent = { },
-        overlineContent = { },
-        trailingContent = { Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = null, tint = nhsGrey2)},
-        supportingContent = { }
-
-    )
-    HorizontalDivider(color = nhsGrey4)
+        if (showDivider) {
+            HorizontalDivider(color = nhsGrey4)
+        }
+    }
 }
 
 // on below line we are creating a function to open custom chrome tabs.
-fun openTab(context: Context) {
+fun openTab(context: Context, url: String) {
     // on below line we are creating a variable for
     // package name and specifying package name as
     // package of chrome application.
     val package_name = "com.android.chrome"
-
-    // on below line we are creating a variable for
-    // our URL which we have to open in chrome tabs
-    val URL = "https://111.nhs.uk"
 
     // on below line we are creating a variable
     // for the activity and initializing it.
@@ -123,17 +137,47 @@ fun openTab(context: Context) {
 
         // on below line we are calling launch url method
         // and passing url to it on below line.
-        customBuilder.launchUrl(context, Uri.parse(URL))
+        customBuilder.launchUrl(context, Uri.parse(url))
     } else {
         // this method will be called if the
         // chrome is not present in user device.
         // in this case we are simply passing URL
         // within intent to open it.
-        val i = Intent(Intent.ACTION_VIEW, Uri.parse(URL))
+        val i = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
         // on below line we are calling start
         // activity to start the activity.
         activity?.startActivity(i)
     }
+}
 
+// Preview with single item
+@Preview(showBackground = true, backgroundColor = 0xFFF0F4F5)
+@Composable
+fun ChromeCustomTabPreview() {
+    ChromeCustomTab(
+        text = "Check if you need urgent medical help using 111 online",
+        url = "https://111.nhs.uk"
+    )
+}
+
+// Preview with multiple items showing all three NHS links
+@Preview(showBackground = true, backgroundColor = 0xFFF0F4F5)
+@Composable
+fun MultipleCustomTabsPreview() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        ChromeCustomTab(
+            text = "Check if you need urgent medical help using 111 online",
+            url = "https://111.nhs.uk"
+        )
+        ChromeCustomTab(
+            text = "Health A to Z - Browse conditions and treatments",
+            url = "https://www.nhs.uk/health-a-to-z/"
+        )
+        ChromeCustomTab(
+            text = "NHS Services - Find services near you",
+            url = "https://www.nhs.uk/nhs-services/",
+            showDivider = false // No divider on last item
+        )
+    }
 }

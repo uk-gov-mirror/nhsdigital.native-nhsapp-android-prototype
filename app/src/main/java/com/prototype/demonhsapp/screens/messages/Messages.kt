@@ -1,34 +1,51 @@
 package com.prototype.demonhsapp.screens.messages
 
 import android.view.SoundEffectConstants
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowForward
-import androidx.compose.material3.Badge
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MarkEmailUnread
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,145 +56,377 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.components.AccountButton
 import com.prototype.demonhsapp.components.HelpButton
-import com.prototype.demonhsapp.navigation.Routes
-import com.prototype.demonhsapp.ui.theme.nhsGrey2
+import com.prototype.demonhsapp.viewmodels.MessagesViewModel
+import com.prototype.demonhsapp.ui.theme.nhsBlue
+import com.prototype.demonhsapp.ui.theme.nhsGrey
 import com.prototype.demonhsapp.ui.theme.nhsGrey4
 import com.prototype.demonhsapp.ui.theme.nhsGrey5
 
+data class Message(
+    val id: String,
+    val sender: String,
+    val subject: String,
+    val preview: String,
+    val timestamp: String,
+    val isRead: Boolean = false,
+    val isImportant: Boolean = false
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Messages(navController: NavController, modifier: Modifier) {
+fun Messages(
+    navController: NavController,
+    viewModel: MessagesViewModel,
+    modifier: Modifier = Modifier
+) {
     val view = LocalView.current
-    val haptics = LocalHapticFeedback.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
+    // Get messages from ViewModel
+    val messages = viewModel.messages.value
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
                 title = {
-                    Text("Messages", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
-                },
-                navigationIcon = {
-//                    IconButton(onClick = { /* doSomething() */ }) {
-//                        Icon(
-//                            imageVector = Icons.Filled.Menu,
-//                            contentDescription = "Localized description"
-//                        )
-//                    }
+                    Text(
+                        "Messages",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = (24 + (32 - 24) * (1 - scrollBehavior.state.collapsedFraction)).sp,
+                        fontWeight = FontWeight.Normal
+                    )
                 },
                 actions = {
                     HelpButton()
                     AccountButton()
                 },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = nhsGrey5, scrolledContainerColor = nhsGrey4.copy(alpha = 0.2f)),
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = nhsGrey5,
+                    scrolledContainerColor = nhsGrey4.copy(alpha = 0.2f)
+                ),
                 scrollBehavior = scrollBehavior
             )
-        },
-        bottomBar = {
-//            NavigationBar(containerColor = nhsBlue, modifier = Modifier) {
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.Home, contentDescription = null)}, label = {Text("Home")}, selected = false, onClick = {navController.navigate(Routes.home)}, colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.LocalHospital, contentDescription = null)}, label = {Text("Services")}, selected = false, onClick = {navController.navigate(Routes.services)}, colors = NavigationBarItemColors(selectedIconColor = nhsBlue, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White, disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = {Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = null)}, label = {Text("Your health")}, selected = false, onClick = {navController.navigate(Routes.yourHealth)}, colors = NavigationBarItemColors(selectedIconColor = nhsBlue, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White, disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//                NavigationBarItem(icon = { BadgedBox(badge = { Badge{ Text("2", modifier = Modifier.semantics(){contentDescription = "8 new notifications"}) } }) {Icon(imageVector = Icons.Default.Email, contentDescription = null)} }, label = {Text("Messages")}, selected = true, onClick = {navController.navigate(Routes.messages)}, colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey))
-//
-//            }
-        },
-        content = { values ->
-            Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize()) {
-                LazyColumn(
-                    modifier = Modifier.padding(values).padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(0.dp)
-                ) {
-                    item() {
-
-                        Column (modifier = Modifier.padding(bottom = 24.dp)) {
-                            Text("You have 4 inboxes", fontSize = 16.sp)
+        }
+    ) { paddingValues ->
+        Surface(
+            color = nhsGrey5,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                items(
+                    items = messages,
+                    key = { it.id }
+                ) { message ->
+                    SwipeableMessageItem(
+                        message = message,
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            // Mark as read when clicked
+                            viewModel.markAsRead(message.id)
+                            navController.navigate("message_detail/${message.id}")
+                        },
+                        onDelete = {
+                            viewModel.deleteMessage(message.id)
+                        },
+                        onMarkUnread = {
+                            viewModel.markAsUnread(message.id)
                         }
-                    }
-                    //Start of section
-                    item() {
-                        Card (Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
-                            Column () {
-                                ListItem(
-                                    modifier = Modifier.clickable(onClick = {
-                                        navController.navigate(Routes.yourMessages)
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    }),
-                                    colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Your NHS healthcare services", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
-                                    leadingContent = { },
-                                    overlineContent = { Badge { Text("2") }  },
-                                    trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
-                                    // To-Do: Fix bullet point formatting
-                                    supportingContent = { Text("You may receive messages:\r\nfrom your GP surgery\r\nabout a hospital and specialist care appointments\r\nabout invitations and reminders ", modifier = Modifier.padding(bottom = 8.dp)) }
-
-                                )
-                                HorizontalDivider(color = nhsGrey4)
-                            }
-                            Column () {
-                                ListItem(
-                                    modifier = Modifier.clickable(onClick = {
-                                    /*TODO*/
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    }),
-                                    colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Your hospital and specialist doctors", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
-                                    leadingContent = { },
-                                    overlineContent = { },
-                                    trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
-                                    // To-Do: Fix bullet point formatting
-                                    supportingContent = { Text("You may send or receive messages about:\r\nyour health record\r\ndocuments and letters\r\npre-appointment questionnaires", modifier = Modifier.padding(bottom = 8.dp)) }
-
-                                )
-                                HorizontalDivider(color = nhsGrey4)
-                            }
-                            Column () {
-                                ListItem(
-                                    modifier = Modifier.clickable(onClick = {
-                                    /*TODO*/
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    }),
-                                    colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("Replies to your GP requests", fontSize = 18.sp, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp)) },
-                                    leadingContent = { },
-                                    overlineContent = { },
-                                    trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding( top = 16.dp, bottom = 8.dp))},
-                                    // To-Do: Fix bullet point formatting
-                                    supportingContent = { Text("You may receive responses to queries you submitted about:\r\nhealth problems\r\nfit (sick) notes\r\ndoctor's letters ", modifier = Modifier.padding(bottom = 8.dp)) }
-
-                                )
-                                HorizontalDivider(color = nhsGrey4)
-                            }
-                            Column () {
-                                ListItem(
-                                    modifier = Modifier.clickable(onClick = {
-                                    /*TODO*/
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    }),
-                                    colors = ListItemDefaults.colors(Color.White) ,
-                                    headlineContent = { Text("GP surgery messaging", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) },
-                                    leadingContent = { },
-                                    overlineContent = { },
-                                    trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))},
-                                    supportingContent = { Text("Send and view messages from staff at your GP surgery") }
-
-                                )
-                                HorizontalDivider(color = nhsGrey4)
-                            }
-                        }
-                    }
-
-
+                    )
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SwipeableMessageItem(
+    message: Message,
+    onClick: () -> Unit,
+    onDelete: () -> Unit,
+    onMarkUnread: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val dismissState = rememberSwipeToDismissBoxState(
+        confirmValueChange = { dismissValue ->
+            when (dismissValue) {
+                SwipeToDismissBoxValue.EndToStart -> {
+                    onDelete()
+                    true
+                }
+                SwipeToDismissBoxValue.StartToEnd -> {
+                    onMarkUnread()
+                    false // Don't dismiss, just mark as unread
+                }
+                else -> false
+            }
+        }
+    )
+
+    SwipeToDismissBox(
+        state = dismissState,
+        modifier = modifier,
+        backgroundContent = {
+            val direction = dismissState.dismissDirection
+            val color by animateColorAsState(
+                targetValue = when (dismissState.targetValue) {
+                    SwipeToDismissBoxValue.EndToStart -> Color.Red.copy(alpha = 0.8f)
+                    SwipeToDismissBoxValue.StartToEnd -> nhsBlue.copy(alpha = 0.8f)
+                    else -> Color.Transparent
+                },
+                label = "background color"
+            )
+
+            val scale by animateFloatAsState(
+                targetValue = if (dismissState.targetValue != SwipeToDismissBoxValue.Settled) 1.3f else 0.8f,
+                label = "icon scale"
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color)
+                    .padding(horizontal = 24.dp)
+            ) {
+                when (dismissState.dismissDirection) {
+                    SwipeToDismissBoxValue.EndToStart -> {
+                        // Delete action on right swipe
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            tint = Color.White,
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .scale(scale)
+                        )
+                    }
+                    SwipeToDismissBoxValue.StartToEnd -> {
+                        // Mark as unread on left swipe
+                        Icon(
+                            imageVector = Icons.Default.MarkEmailUnread,
+                            contentDescription = "Mark as unread",
+                            tint = Color.White,
+                            modifier = Modifier
+                                .align(Alignment.CenterStart)
+                                .scale(scale)
+                        )
+                    }
+                    else -> {}
+                }
+            }
+        },
+        enableDismissFromStartToEnd = true,
+        enableDismissFromEndToStart = true
+    ) {
+        Surface(
+            color = Color.White,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column {
+                MessageListItem(
+                    message = message,
+                    onClick = onClick
+                )
+                HorizontalDivider(
+                    modifier = Modifier.padding(start = 72.dp),
+                    color = nhsGrey4
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MessageListItem(
+    message: Message,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.Top
+    ) {
+        // Avatar circle with initials
+        Surface(
+            modifier = Modifier
+                .size(48.dp)
+                .clip(CircleShape),
+            color = nhsBlue.copy(alpha = 0.2f)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = message.sender.first().uppercase(),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = nhsBlue,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        // Message content
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = message.sender,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = if (message.isRead) FontWeight.Normal else FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    if (!message.isRead) {
+                        Icon(
+                            imageVector = Icons.Filled.Circle,
+                            contentDescription = "Unread",
+                            tint = nhsBlue,
+                            modifier = Modifier.size(8.dp)
+                        )
+                    }
+                    Text(
+                        text = message.timestamp,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = nhsGrey,
+                        fontWeight = if (message.isRead) FontWeight.Normal else FontWeight.Bold
+                    )
+                }
+            }
+
+            Text(
+                text = message.subject,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = if (message.isRead) FontWeight.Normal else FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(top = 2.dp)
+            )
+
+            Text(
+                text = message.preview,
+                style = MaterialTheme.typography.bodySmall,
+                color = nhsGrey,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+    }
+}
+
+fun getSampleMessages(): List<Message> {
+    return listOf(
+        Message(
+            id = "1",
+            sender = "NHS Leeds Teaching Hospitals",
+            subject = "Appointment Confirmation",
+            preview = "Your appointment has been confirmed for 15th November at 10:00 AM in the Cardiology Department.",
+            timestamp = "9:30 AM",
+            isRead = false
+        ),
+        Message(
+            id = "2",
+            sender = "Dr Sarah Johnson",
+            subject = "Test Results Available",
+            preview = "Your recent blood test results are now available to view. Please log in to your account to see the details.",
+            timestamp = "Yesterday",
+            isRead = false
+        ),
+        Message(
+            id = "3",
+            sender = "Oak Tree Surgery",
+            subject = "Prescription Ready",
+            preview = "Your repeat prescription is ready for collection at the pharmacy. Please collect within 7 days.",
+            timestamp = "2 days ago",
+            isRead = true
+        ),
+        Message(
+            id = "4",
+            sender = "NHS App Team",
+            subject = "New Feature: Video Consultations",
+            preview = "You can now book video consultations with your GP through the NHS App. Tap here to learn more.",
+            timestamp = "Nov 1",
+            isRead = true
+        ),
+        Message(
+            id = "5",
+            sender = "Manchester Royal Infirmary",
+            subject = "Follow-up Appointment Needed",
+            preview = "Please contact us to schedule your follow-up appointment following your recent consultation.",
+            timestamp = "Oct 28",
+            isRead = true
+        ),
+        Message(
+            id = "6",
+            sender = "Vaccination Centre",
+            subject = "Flu Jab Reminder",
+            preview = "It's that time of year again. Book your flu vaccination appointment at your local pharmacy.",
+            timestamp = "Oct 25",
+            isRead = true
+        ),
+        Message(
+            id = "7",
+            sender = "Dr Michael Chen",
+            subject = "Medication Review Due",
+            preview = "Your annual medication review is due. Please book an appointment with reception at your convenience.",
+            timestamp = "Oct 20",
+            isRead = true
+        ),
+        Message(
+            id = "8",
+            sender = "NHS 111",
+            subject = "Your Recent Query",
+            preview = "Thank you for using NHS 111 online. Based on your symptoms, we recommend you contact your GP surgery.",
+            timestamp = "Oct 15",
+            isRead = true
+        )
     )
 }
 
-@Preview (showSystemUi = true, backgroundColor = 0xFFF0F4F5)
+@Preview(showSystemUi = true, backgroundColor = 0xFFF0F4F5)
 @Composable
-fun MessagesPreview(){
-    Messages(rememberNavController(), modifier = Modifier)
+fun MessagesPreview() {
+    Messages(rememberNavController(), MessagesViewModel(), modifier = Modifier)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MessageListItemPreview() {
+    MessageListItem(
+        message = Message(
+            id = "1",
+            sender = "NHS Leeds Teaching Hospitals",
+            subject = "Appointment Confirmation",
+            preview = "Your appointment has been confirmed for 15th November at 10:00 AM in the Cardiology Department.",
+            timestamp = "9:30 AM",
+            isRead = false
+        ),
+        onClick = {}
+    )
 }

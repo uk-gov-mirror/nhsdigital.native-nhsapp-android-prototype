@@ -70,10 +70,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.components.AccountButton
 import com.prototype.demonhsapp.components.CampaignCard
+import com.prototype.demonhsapp.components.CardData
 import com.prototype.demonhsapp.components.ChromeCustomTab
 import com.prototype.demonhsapp.components.HelpButton
-import com.prototype.demonhsapp.components.MultipleCardsCPreview
 import com.prototype.demonhsapp.components.WebViewButton
+import com.prototype.demonhsapp.components.WidgetCardLazyRow
 import com.prototype.demonhsapp.navigation.Routes
 import com.prototype.demonhsapp.ui.theme.nhsBlack
 import com.prototype.demonhsapp.ui.theme.nhsBlue
@@ -95,6 +96,21 @@ fun Home(navController: NavController, modifier: Modifier) {
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = (LocalConfiguration.current.screenHeightDp / 2).dp,
+        sheetDragHandle = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(32.dp)
+                        .height(4.dp)
+                        .background(Color.White, RoundedCornerShape(2.dp))
+                )
+            }
+        },
         sheetContent = {
             LazyColumn(
                 modifier = Modifier
@@ -104,63 +120,13 @@ fun Home(navController: NavController, modifier: Modifier) {
                 contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(0.dp)
             ) {
-                // Section title
-                item {
-                    Column(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
-                        Text("Services", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = nhsGrey)
-                    }
-                }
-                // List
+                // List items
                 item {
                     Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                         Column {
                             ListItem(
                                 modifier = Modifier.clickable(onClick = {
                                     navController.navigate(Routes.prescriptions)
-                                    view.playSoundEffect(SoundEffectConstants.CLICK)
-                                }),
-                                colors = ListItemDefaults.colors(Color.White),
-                                headlineContent = { Text("Request medicines", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
-                                leadingContent = { },
-                                overlineContent = { },
-                                trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2) },
-                                supportingContent = { }
-                            )
-                            HorizontalDivider(color = nhsGrey4)
-                        }
-                        Column {
-                            ChromeCustomTab()
-                        }
-                    }
-                }
-
-                // Section title
-                item {
-                    Column(modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
-                        Text("Your health", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = nhsGrey)
-                    }
-                }
-                // List
-                item {
-                    Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
-                        Column {
-                            ListItem(
-                                modifier = Modifier.clickable(onClick = {
-                                    view.playSoundEffect(SoundEffectConstants.CLICK)
-                                }),
-                                colors = ListItemDefaults.colors(Color.White),
-                                headlineContent = { Text("GP health record", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
-                                leadingContent = { },
-                                overlineContent = { },
-                                trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2) },
-                                supportingContent = { }
-                            )
-                            HorizontalDivider(color = nhsGrey4)
-                        }
-                        Column {
-                            ListItem(
-                                modifier = Modifier.clickable(onClick = {
-                                    navController.navigate(Routes.prescriptions2)
                                     view.playSoundEffect(SoundEffectConstants.CLICK)
                                 }),
                                 colors = ListItemDefaults.colors(Color.White),
@@ -179,7 +145,7 @@ fun Home(navController: NavController, modifier: Modifier) {
                                     view.playSoundEffect(SoundEffectConstants.CLICK)
                                 }),
                                 colors = ListItemDefaults.colors(Color.White),
-                                headlineContent = { Text("Upcoming and past appointments", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                headlineContent = { Text("Appointments", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
                                 leadingContent = { },
                                 overlineContent = { },
                                 trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2) },
@@ -187,74 +153,76 @@ fun Home(navController: NavController, modifier: Modifier) {
                             )
                             HorizontalDivider(color = nhsGrey4)
                         }
-                    }
-                }
-                // Section title
-                item {
-                    Column(modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
-                        Text("Messages", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = nhsGrey)
-                    }
-                }
-                // List
-                item {
-                    Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
-                        Column {
-                            ListItem(
-                                modifier = Modifier.clickable(onClick = {
-                                    navController.navigate(Routes.yourMessages)
-                                    view.playSoundEffect(SoundEffectConstants.CLICK)
-                                }),
-                                colors = ListItemDefaults.colors(Color.White),
-                                headlineContent = { Text("View your messages", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
-                                leadingContent = { Icon(Icons.Outlined.Email, contentDescription = null) },
-                                overlineContent = { },
-                                trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2) },
-                                supportingContent = { }
-                            )
-                            HorizontalDivider(color = nhsGrey4)
-                        }
-                    }
-                }
-                // Section title
-                item {
-                    Column(modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
-                        Text("Account", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = nhsGrey)
-                    }
-                }
-                // List
-                item {
-                    Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
                         Column {
                             ListItem(
                                 modifier = Modifier.clickable(onClick = {
                                     view.playSoundEffect(SoundEffectConstants.CLICK)
                                 }),
                                 colors = ListItemDefaults.colors(Color.White),
-                                headlineContent = { Text("Manage services for another person", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
-                                leadingContent = { BadgedBox(badge = { Badge(content = { Text("2") }) }) { Icon(Icons.Outlined.SupervisedUserCircle, contentDescription = null) } },
+                                headlineContent = { Text("Test results", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                leadingContent = { },
                                 overlineContent = { },
                                 trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2) },
                                 supportingContent = { }
                             )
                             HorizontalDivider(color = nhsGrey4)
                         }
+                        Column {
+                            ListItem(
+                                modifier = Modifier.clickable(onClick = {
+                                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                                }),
+                                colors = ListItemDefaults.colors(Color.White),
+                                headlineContent = { Text("Vaccinations", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                leadingContent = { },
+                                overlineContent = { },
+                                trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2) },
+                                supportingContent = { }
+                            )
+                            HorizontalDivider(color = nhsGrey4)
+                        }
+                        Column {
+                            ListItem(
+                                modifier = Modifier.clickable(onClick = {
+                                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                                }),
+                                colors = ListItemDefaults.colors(Color.White),
+                                headlineContent = { Text("Documents", fontSize = 18.sp, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) },
+                                leadingContent = { },
+                                overlineContent = { },
+                                trailingContent = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = nhsGrey2) },
+                                supportingContent = { }
+                            )
+                        }
                     }
                 }
-                // Campaign card
+
+                // Section title for NHS web links
                 item {
-                    Column(modifier = Modifier.padding(bottom = 16.dp)) { CampaignCard() }
+                    Text(
+                        text = "NHS information and support",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+                        color = Color.White
+                    )
                 }
+
+                // NHS Web Links List
                 item {
-                    TextButton(
-                        onClick = {
-                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                        },
-                        colors = ButtonDefaults.textButtonColors(contentColor = nhsBlue)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(imageVector = Icons.AutoMirrored.Outlined.HelpOutline, contentDescription = null)
-                            Text("Get help using the NHS App", modifier = Modifier.padding(start = 8.dp), fontSize = 18.sp)
-                        }
+                    Card(Modifier.padding(bottom = 16.dp), colors = CardDefaults.cardColors(Color.White)) {
+                        ChromeCustomTab(
+                            text = "Check if you need urgent medical help using 111 online",
+                            url = "https://111.nhs.uk"
+                        )
+                        ChromeCustomTab(
+                            text = "Health A to Z - Browse conditions and treatments",
+                            url = "https://www.nhs.uk/health-a-to-z/"
+                        )
+                        ChromeCustomTab(
+                            text = "NHS Services - Find services near you",
+                            url = "https://www.nhs.uk/nhs-services/",
+                            showDivider = false
+                        )
                     }
                 }
             }
@@ -263,30 +231,53 @@ fun Home(navController: NavController, modifier: Modifier) {
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         topBar = { }
     ) { paddingValues ->
-        // Main content - Make it scrollable with LazyColumn
-        LazyColumn(
+        // Main content - Non-scrollable Column
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(nhsGrey5)
-                .padding(paddingValues),
-            contentPadding = PaddingValues(
-                start = 16.dp,
-                end = 16.dp,
-                top = 32.dp,
-                bottom = (LocalConfiguration.current.screenHeightDp / 2 + 32).dp // Extra padding to scroll above bottom sheet
-            )
+                .padding(paddingValues)
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 64.dp
+                )
         ) {
-            item {
-                Header()
-            }
+            Header()
 
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-            }
+            Spacer(modifier = Modifier.height(24.dp))
 
-            item {
-                MultipleCardsCPreview()
-            }
+            // Widget Cards Lazy Row
+            WidgetCardLazyRow(
+                cards = listOf(
+                    CardData(
+                        headline = "Prescriptions",
+                        subheadline = "2 ready to collect",
+                        progress = 0.67f
+                    ),
+                    CardData(
+                        headline = "Appointments",
+                        subheadline = "Next: Tomorrow 10:00 AM",
+                        progress = 0.85f
+                    ),
+                    CardData(
+                        headline = "Test Results",
+                        subheadline = "1 new result available",
+                        progress = 1.0f
+                    ),
+                    CardData(
+                        headline = "Health Goals",
+                        subheadline = "7,500 of 10,000 steps",
+                        progress = 0.75f
+                    ),
+                    CardData(
+                        headline = "Vaccinations",
+                        subheadline = "Up to date",
+                        progress = 1.0f
+                    )
+                ),
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
         }
     }
 }
