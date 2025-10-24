@@ -9,13 +9,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.nhs.online.nhsonline.design.theme.NHSAppTheme
 import com.nhs.online.nhsonline.proto.health.HealthScreen
 import com.nhs.online.nhsonline.proto.home.HomeScreen
 import com.nhs.online.nhsonline.proto.messages.MessagesScreen
 import com.nhs.online.nhsonline.proto.navigation.BottomBar
 import com.nhs.online.nhsonline.proto.navigation.BottomNavItem
 import com.nhs.online.nhsonline.proto.services.ServicesScreen
-import com.nhs.online.nhsonline.proto.ui.theme.NHSAppTheme
 
 @Composable
 fun NHSAppScreen(){

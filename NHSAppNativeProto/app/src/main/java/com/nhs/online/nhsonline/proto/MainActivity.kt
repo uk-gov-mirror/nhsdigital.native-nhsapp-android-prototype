@@ -4,24 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.nhs.online.nhsonline.proto.health.HealthScreen
-import com.nhs.online.nhsonline.proto.home.HomeScreen
-import com.nhs.online.nhsonline.proto.messages.MessagesScreen
-import com.nhs.online.nhsonline.proto.navigation.BottomBar
-import com.nhs.online.nhsonline.proto.navigation.BottomNavItem
-import com.nhs.online.nhsonline.proto.services.ServicesScreen
-import com.nhs.online.nhsonline.proto.ui.theme.NHSAppTheme
+import com.nhs.online.nhsonline.design.theme.NHSAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

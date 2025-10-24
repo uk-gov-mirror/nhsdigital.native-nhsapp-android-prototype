@@ -1,4 +1,4 @@
-package com.nhs.online.nhsonline.proto.ui.theme
+package com.nhs.online.nhsonline.design.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

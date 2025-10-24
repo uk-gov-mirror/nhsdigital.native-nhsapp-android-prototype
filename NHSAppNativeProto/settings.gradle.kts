@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "NHS App Native"
 include(":app")
- 
+include(":nhsappdesignsystem")

@@ -1,4 +1,4 @@
-package com.nhs.online.nhsonline.proto.ui.theme
+package com.nhs.online.nhsonline.design.theme
 
 import androidx.compose.ui.graphics.Color
 
