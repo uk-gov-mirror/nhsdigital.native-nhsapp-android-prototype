@@ -18,21 +18,26 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.prototype.demonhsapp.ui.theme.nhsBlack
 import com.prototype.demonhsapp.ui.theme.nhsBlue
 import com.prototype.demonhsapp.ui.theme.nhsGrey
 import com.prototype.demonhsapp.ui.theme.nhsGrey4
@@ -48,10 +53,26 @@ fun MessageDetail(
     // Find the message by ID (in a real app, this would come from a ViewModel or repository)
     val message = getSampleMessages().find { it.id == messageId }
 
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
-                title = { Text("Message") },
+            LargeTopAppBar(
+                title = {
+                    if (message != null) {
+                        Column {
+                            Text(
+                                text = message.subject,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                fontWeight = FontWeight.Normal
+                            )
+                        }
+                    } else {
+                        Text("Message")
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
@@ -60,9 +81,11 @@ fun MessageDetail(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = nhsGrey5
-                )
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = nhsGrey5,
+                    scrolledContainerColor = nhsGrey5
+                ),
+                scrollBehavior = scrollBehavior
             )
         }
     ) { paddingValues ->
@@ -79,7 +102,7 @@ fun MessageDetail(
                 ) {
                     // Message header card
                     Surface(
-                        color = MaterialTheme.colorScheme.surface,
+                        color = nhsGrey5,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
@@ -87,15 +110,6 @@ fun MessageDetail(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                         ) {
-                            // Subject
-                            Text(
-                                text = message.subject,
-                                style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
                             // Sender info
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -126,7 +140,8 @@ fun MessageDetail(
                                     Text(
                                         text = message.sender,
                                         style = MaterialTheme.typography.bodyLarge,
-                                        fontWeight = FontWeight.SemiBold
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = nhsBlack
                                     )
                                     Text(
                                         text = "to me",
@@ -148,7 +163,7 @@ fun MessageDetail(
 
                     // Message body
                     Surface(
-                        color = MaterialTheme.colorScheme.surface,
+                        color = nhsGrey5,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
@@ -159,7 +174,8 @@ fun MessageDetail(
                             Text(
                                 text = getFullMessageContent(message),
                                 style = MaterialTheme.typography.bodyLarge,
-                                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5f
+                                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5f,
+                                color = nhsBlack
                             )
                         }
                     }

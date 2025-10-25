@@ -13,6 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 // NHS colours
 val nhsBlue = Color(0xFF005EB8)
 val nhsDarkBlue = Color(0xFF002F5C)
+val nhsLightBlue = Color(0xFFCCDFF1)
 val nhsDarkGreen = Color(0xFF00401E)
 val nhsDarkPink = Color(0xFF7C2855)
 val nhsGreen = Color(0xFF007F3B)

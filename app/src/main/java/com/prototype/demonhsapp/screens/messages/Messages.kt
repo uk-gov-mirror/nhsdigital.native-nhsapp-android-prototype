@@ -21,10 +21,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.MarkEmailUnread
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -56,6 +60,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.components.AccountButton
 import com.prototype.demonhsapp.components.HelpButton
+import com.prototype.demonhsapp.ui.theme.nhsBlack
 import com.prototype.demonhsapp.viewmodels.MessagesViewModel
 import com.prototype.demonhsapp.ui.theme.nhsBlue
 import com.prototype.demonhsapp.ui.theme.nhsGrey
@@ -82,16 +87,26 @@ fun Messages(
     val view = LocalView.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
-    // Get messages from ViewModel
+    // Filter state
+    var showUnreadOnly by remember { mutableStateOf(false) }
+    var showFilterMenu by remember { mutableStateOf(false) }
+
+    // Get messages from ViewModel and filter if needed
     val messages = viewModel.messages.value
+    val filteredMessages = if (showUnreadOnly) {
+        messages.filter { !it.isRead }
+    } else {
+        messages
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
                 title = {
+                    val unreadCount = viewModel.unreadCount
                     Text(
-                        "Messages",
+                        text = if (unreadCount > 0) "Messages ($unreadCount)" else "Messages",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = (24 + (32 - 24) * (1 - scrollBehavior.state.collapsedFraction)).sp,
@@ -99,8 +114,32 @@ fun Messages(
                     )
                 },
                 actions = {
-                    HelpButton()
-                    AccountButton()
+                    IconButton(onClick = { showFilterMenu = true }) {
+                        Icon(
+                            imageVector = Icons.Default.FilterList,
+                            contentDescription = "Filter messages",
+                            tint = nhsBlack
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = showFilterMenu,
+                        onDismissRequest = { showFilterMenu = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("All messages") },
+                            onClick = {
+                                showUnreadOnly = false
+                                showFilterMenu = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Unread only") },
+                            onClick = {
+                                showUnreadOnly = true
+                                showFilterMenu = false
+                            }
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
                     containerColor = nhsGrey5,
@@ -120,7 +159,7 @@ fun Messages(
                     .padding(paddingValues)
             ) {
                 items(
-                    items = messages,
+                    items = filteredMessages,
                     key = { it.id }
                 ) { message ->
                     SwipeableMessageItem(
@@ -225,7 +264,7 @@ fun SwipeableMessageItem(
         enableDismissFromEndToStart = true
     ) {
         Surface(
-            color = Color.White,
+            color = nhsGrey5,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column {
@@ -293,6 +332,7 @@ fun MessageListItem(
                     text = message.sender,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = if (message.isRead) FontWeight.Normal else FontWeight.Bold,
+                    color = nhsBlack,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f)
@@ -323,6 +363,7 @@ fun MessageListItem(
                 text = message.subject,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = if (message.isRead) FontWeight.Normal else FontWeight.SemiBold,
+                color = nhsGrey,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(top = 2.dp)

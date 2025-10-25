@@ -15,10 +15,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -42,10 +44,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import com.prototype.demonhsapp.ui.theme.nhsBlack
+import com.prototype.demonhsapp.ui.theme.nhsGrey
 import com.prototype.demonhsapp.ui.theme.nhsGrey2
 import com.prototype.demonhsapp.ui.theme.nhsGrey4
 import com.prototype.demonhsapp.ui.theme.nhsGrey5
@@ -67,32 +72,44 @@ fun ChromeCustomTab(
     Column {
         // Button which triggers the remember state variable
         ListItem(
-            modifier = modifier.clickable(onClick = {
-                openTab(ctx, url)
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-            }),
-            colors = ListItemDefaults.colors(Color.White),
-            headlineContent = {
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-                )
-            },
-            leadingContent = { },
-            overlineContent = { },
-            trailingContent = {
+            modifier = modifier
+                .clickable(onClick = {
+                    openTab(ctx, url)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                })
+                .padding(vertical = 8.dp),
+            colors = ListItemDefaults.colors(Color.Transparent),
+            leadingContent = {
                 Icon(
                     Icons.AutoMirrored.Outlined.OpenInNew,
                     contentDescription = null,
-                    tint = nhsGrey2
+                    tint = nhsGrey2,
+                    modifier = Modifier.size(24.dp)
                 )
             },
-            supportingContent = { }
+            headlineContent = {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Normal,
+                    color = nhsBlack
+                )
+            },
+            supportingContent = {
+                Text(
+                    text = Uri.parse(url).host ?: url,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = nhsGrey2
+                )
+            },
+            tonalElevation = 0.dp
         )
 
         if (showDivider) {
-            HorizontalDivider(color = nhsGrey4)
+            HorizontalDivider(
+                color = nhsGrey4.copy(alpha = 0.3f),
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
         }
     }
 }

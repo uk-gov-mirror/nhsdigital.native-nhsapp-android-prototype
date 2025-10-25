@@ -5,19 +5,22 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocalHospital
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.LocalHospital
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -33,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -48,6 +52,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prototype.demonhsapp.viewmodels.MessagesViewModel
+import com.prototype.demonhsapp.screens.accountsettings.AccountSettings
 import com.prototype.demonhsapp.screens.ScreenA
 import com.prototype.demonhsapp.screens.ScreenB
 import com.prototype.demonhsapp.screens.home.Home
@@ -66,6 +71,7 @@ import com.prototype.demonhsapp.screens.yourhealth.prescriptions.PrescriptionsDe
 import com.prototype.demonhsapp.screens.yourhealth.prescriptions.ViewManagePrescriptions
 import com.prototype.demonhsapp.ui.theme.nhsBlue
 import com.prototype.demonhsapp.ui.theme.nhsGrey
+import com.prototype.demonhsapp.ui.theme.nhsGrey5
 
 
 @Composable
@@ -92,13 +98,12 @@ fun AppNavigation(){
     // Add the navigation controller
     val navController = rememberNavController()
 
-    // List of navigation bar items to loop through
+    // List of navigation bar items to loop through - now only 3 main destinations
     val navItemList = listOf(
-        navItem ("Home", Icons.Default.Home, Icons.Outlined.Home, "home", false),
-        navItem("Services", Icons.Default.LocalHospital, Icons.Outlined.LocalHospital, "services", false),
-        navItem("Your health", Icons.Default.Favorite, Icons.Outlined.FavoriteBorder, "your_health", false),
+        navItem("Summary", Icons.Default.Dashboard, Icons.Outlined.Dashboard, "home", false),
         navItem("Messages", Icons.Default.Email, Icons.Outlined.Email, "messages", false,
-            if (messagesViewModel.unreadCount > 0) messagesViewModel.unreadCount else null)
+            if (messagesViewModel.unreadCount > 0) messagesViewModel.unreadCount else null),
+        navItem("Profile", Icons.Default.Person, Icons.Outlined.Person, "profile", false)
     )
 
     // remember the state of the navigation bar item
@@ -108,12 +113,22 @@ fun AppNavigation(){
     Scaffold(
         topBar = { },
         bottomBar = {
-            NavigationBar(containerColor = nhsBlue) {
+            NavigationBar(containerColor = nhsGrey5) {
 
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
                 navItemList.forEachIndexed { index, navItem ->
+                    // Animate scale when selected
+                    val scale by animateFloatAsState(
+                        targetValue = if (selectedIndex == index) 1.1f else 1f,
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        ),
+                        label = "scale"
+                    )
+
                     NavigationBarItem(
                         selected = selectedIndex == index,
                         onClick = {
@@ -126,9 +141,36 @@ fun AppNavigation(){
 //                            view.playSoundEffect(SoundEffectConstants.CLICK)
                             haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                         },
-                        icon = { BadgedBox(badge = { if (navItem.badgeCount != null) {Badge{ Text(text = navItem.badgeCount.toString()) }} else if (navItem.hasNews) { Badge() } }) { Icon(imageVector = if (index == selectedIndex) {navItem.selectedIcon} else navItem.unselectedIcon, contentDescription = null) } },
+                        icon = {
+                            BadgedBox(
+                                badge = {
+                                    if (navItem.badgeCount != null) {
+                                        Badge{ Text(text = navItem.badgeCount.toString()) }
+                                    } else if (navItem.hasNews) {
+                                        Badge()
+                                    }
+                                },
+                                modifier = Modifier.graphicsLayer {
+                                    scaleX = scale
+                                    scaleY = scale
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = if (index == selectedIndex) {navItem.selectedIcon} else navItem.unselectedIcon,
+                                    contentDescription = null
+                                )
+                            }
+                        },
                         label = { Text(text = navItem.label)},
-                        colors = NavigationBarItemColors(selectedIconColor = Color.White, unselectedIconColor = Color.White, selectedTextColor = Color.White, unselectedTextColor = Color.White, selectedIndicatorColor = Color.White.copy(alpha = 0.16f), disabledTextColor = nhsGrey, disabledIconColor = nhsGrey)
+                        colors = NavigationBarItemColors(
+                            selectedIconColor = nhsBlue,
+                            unselectedIconColor = nhsGrey,
+                            selectedTextColor = nhsBlue,
+                            unselectedTextColor = nhsGrey,
+                            selectedIndicatorColor = nhsBlue.copy(alpha = 0.2f),
+                            disabledTextColor = nhsGrey,
+                            disabledIconColor = nhsGrey
+                        )
                     )
                 }
             }
@@ -149,11 +191,14 @@ fun AppNavigation(){
                     composable(route = Routes.screenA){ ScreenA(navController, modifier = Modifier) }
                     composable(route = Routes.screenB){ ScreenB() }
 
-                    // Main hubs
+                    // Main destinations - 3 primary screens
                     composable(route = "home", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Home(navController, modifier = Modifier) }
-                    composable(route = "services", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Services(navController, modifier = Modifier) }
-                    composable(route = "your_health", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ YourHealth(navController, modifier = Modifier) }
                     composable(route = "messages", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Messages(navController, messagesViewModel, modifier = Modifier) }
+                    composable(route = "profile", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ AccountSettings(navController, modifier = Modifier) }
+
+                    // Additional screens accessible from main destinations
+                    composable(route = "services"){ Services(navController, modifier = Modifier) }
+                    composable(route = "your_health"){ YourHealth(navController, modifier = Modifier) }
 
                     // Children screens
                     composable(route = Routes.yourMessages){ YourMessages(navController) }
