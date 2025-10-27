@@ -1,82 +1,255 @@
 package com.prototype.demonhsapp.screens.accountsettings
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.view.SoundEffectConstants
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prototype.demonhsapp.ui.theme.*
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountSettings(navController: NavController, modifier: Modifier) {
     val view = LocalView.current
-    val scaffoldState = rememberBottomSheetScaffoldState()
+    val context = LocalContext.current
     val showAlertDialog = remember { mutableStateOf(false) }
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val listState = rememberLazyListState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState,
-        sheetPeekHeight = (LocalConfiguration.current.screenHeightDp / 2).dp,
-        sheetDragHandle = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                contentAlignment = Alignment.Center
-            ) {
+    // Calculate if we should show grey background based on scroll
+    val showGreyBackground = remember {
+        derivedStateOf {
+            // Check if we've scrolled past the first item (profile section)
+            listState.firstVisibleItemIndex > 0 ||
+                    (listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset > 300)
+        }
+    }
+
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            LargeTopAppBar(
+                title = {
+                    Text(
+                        "Profile",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.Medium,
+                        color = if (showGreyBackground.value) nhsBlack else nhsDarkBlue
+                    )
+                },
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = if (showGreyBackground.value) nhsGrey5 else nhsLightBlue,
+                    scrolledContainerColor = if (showGreyBackground.value) nhsGrey5 else nhsLightBlue
+                ),
+                scrollBehavior = scrollBehavior
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+        containerColor = nhsGrey5
+    ) { paddingValues ->
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+        ) {
+            // Profile Header Section with Light Blue Background
+            item {
                 Box(
                     modifier = Modifier
-                        .width(32.dp)
-                        .height(4.dp)
-                        .background(nhsBlack, RoundedCornerShape(2.dp))
-                )
+                        .fillMaxWidth()
+                        .background(nhsLightBlue)
+                        .padding(horizontal = 24.dp)
+                        .padding(top = 16.dp, bottom = 48.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .graphicsLayer {
+                                // Parallax effect - content moves slower than scroll
+                                val scrollOffset = if (listState.firstVisibleItemIndex == 0) {
+                                    listState.firstVisibleItemScrollOffset.toFloat()
+                                } else {
+                                    0f
+                                }
+                                translationY = scrollOffset * 0.5f
+
+                                // Fade out effect as you scroll
+                                alpha = (1f - (scrollOffset / 500f)).coerceIn(0f, 1f)
+
+                                // Scale down effect - content shrinks as you scroll
+                                val scale = (1f - (scrollOffset / 1000f)).coerceIn(0.8f, 1f)
+                                scaleX = scale
+                                scaleY = scale
+                            },
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        // Avatar
+                        Box(
+                            modifier = Modifier
+                                .size(96.dp)
+                                .clip(CircleShape)
+                                .background(Color.White),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Outlined.Person,
+                                contentDescription = "Profile",
+                                tint = nhsBlue,
+                                modifier = Modifier.size(56.dp)
+                            )
+                        }
+
+                        // Name
+                        Text(
+                            "John Smith",
+                            style = MaterialTheme.typography.headlineLarge,
+                            fontWeight = FontWeight.Medium,
+                            color = nhsDarkBlue
+                        )
+
+                        // NHS Number
+                        Text(
+                            "NHS Number: 123 456 7890",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = nhsDarkBlue
+                        )
+
+                        // Grouped action buttons
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            // Copy button
+                            OutlinedButton(
+                                onClick = {
+                                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clip = ClipData.newPlainText("NHS Number", "123 456 7890")
+                                    clipboard.setPrimaryClip(clip)
+
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = "NHS number copied to clipboard",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(48.dp),
+                                colors = ButtonDefaults.outlinedButtonColors(
+                                    contentColor = nhsBlue,
+                                    containerColor = Color.Transparent
+                                ),
+                                border = BorderStroke(1.dp, nhsBlue),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Icon(
+                                    Icons.Outlined.ContentCopy,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text("Copy", style = MaterialTheme.typography.labelLarge)
+                            }
+
+                            // Share button
+                            OutlinedButton(
+                                onClick = {
+                                    val sendIntent = Intent().apply {
+                                        action = Intent.ACTION_SEND
+                                        putExtra(Intent.EXTRA_TEXT, "My NHS Number: 123 456 7890")
+                                        type = "text/plain"
+                                    }
+                                    val shareIntent = Intent.createChooser(sendIntent, "Share NHS Number")
+                                    context.startActivity(shareIntent)
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(48.dp),
+                                colors = ButtonDefaults.outlinedButtonColors(
+                                    contentColor = nhsBlue,
+                                    containerColor = Color.Transparent
+                                ),
+                                border = BorderStroke(1.dp, nhsBlue),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Icon(
+                                    Icons.Outlined.Share,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text("Share", style = MaterialTheme.typography.labelLarge)
+                            }
+                        }
+                    }
+                }
             }
-        },
-        sheetContent = {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(nhsGrey5)
-                    .padding(horizontal = 16.dp),
-                contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                // Account Section
-                item {
+
+            // Grey Background Section Starts
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(nhsGrey5)
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp)
+                ) {
+                    // Account Section Header
                     Text(
                         "Account",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = nhsBlack,
-                        modifier = Modifier.padding(horizontal = 8.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
                     )
-                }
 
-                item {
+                    // Account Card
                     Card(
+                        modifier = Modifier.padding(bottom = 16.dp),
                         colors = CardDefaults.cardColors(Color.White),
                         shape = RoundedCornerShape(28.dp),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -111,21 +284,19 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                             )
                         }
                     }
-                }
 
-                // Preferences Section
-                item {
+                    // Preferences Section Header
                     Text(
                         "Preferences",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = nhsBlack,
-                        modifier = Modifier.padding(horizontal = 8.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
                     )
-                }
 
-                item {
+                    // Preferences Card
                     Card(
+                        modifier = Modifier.padding(bottom = 16.dp),
                         colors = CardDefaults.cardColors(Color.White),
                         shape = RoundedCornerShape(28.dp),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -150,21 +321,19 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                             )
                         }
                     }
-                }
 
-                // Support Section
-                item {
+                    // Support Section Header
                     Text(
                         "Support",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = nhsBlack,
-                        modifier = Modifier.padding(horizontal = 8.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
                     )
-                }
 
-                item {
+                    // Support Card
                     Card(
+                        modifier = Modifier.padding(bottom = 16.dp),
                         colors = CardDefaults.cardColors(Color.White),
                         shape = RoundedCornerShape(28.dp),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -199,10 +368,8 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                             )
                         }
                     }
-                }
 
-                // Log out button
-                item {
+                    // Log out button
                     OutlinedButton(
                         onClick = { showAlertDialog.value = true },
                         modifier = Modifier
@@ -232,69 +399,9 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                             fontWeight = FontWeight.Medium
                         )
                     }
-                }
 
-                // Bottom spacing
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
-        },
-        sheetContainerColor = nhsGrey5,
-        sheetShape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp)
-    ) { paddingValues ->
-        // Main content - Profile header with gradient
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(nhsLightBlue, nhsBlue)
-                    )
-                )
-                .padding(paddingValues),
-            contentPadding = PaddingValues(top = 64.dp)
-        ) {
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    // Avatar
-                    Box(
-                        modifier = Modifier
-                            .size(96.dp)
-                            .clip(CircleShape)
-                            .background(Color.White),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            Icons.Outlined.Person,
-                            contentDescription = "Profile",
-                            tint = nhsBlue,
-                            modifier = Modifier.size(56.dp)
-                        )
-                    }
-
-                    // Name
-                    Text(
-                        "John Smith",
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Medium,
-                        color = nhsDarkBlue
-                    )
-
-                    // NHS Number
-                    Text(
-                        "NHS Number: 123 456 7890",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = nhsDarkBlue
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
+                    // Bottom spacing
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         }

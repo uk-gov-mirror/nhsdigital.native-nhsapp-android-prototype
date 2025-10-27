@@ -184,15 +184,15 @@ fun ChromeCustomTabPreview() {
 fun MultipleCustomTabsPreview() {
     Column(modifier = Modifier.fillMaxWidth()) {
         ChromeCustomTab(
-            text = "Check if you need urgent medical help using 111 online",
+            text = "Check your symptoms using 111 online",
             url = "https://111.nhs.uk"
         )
         ChromeCustomTab(
-            text = "Health A to Z - Browse conditions and treatments",
+            text = "Health A to Z",
             url = "https://www.nhs.uk/health-a-to-z/"
         )
         ChromeCustomTab(
-            text = "NHS Services - Find services near you",
+            text = "Find services near you",
             url = "https://www.nhs.uk/nhs-services/",
             showDivider = false // No divider on last item
         )

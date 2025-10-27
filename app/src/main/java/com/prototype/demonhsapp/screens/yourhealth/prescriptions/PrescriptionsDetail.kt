@@ -1,36 +1,22 @@
 package com.prototype.demonhsapp.screens.yourhealth.prescriptions
 
-
-import android.view.SoundEffectConstants
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MediumTopAppBar
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,197 +24,405 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.prototype.demonhsapp.components.AccountButton
-import com.prototype.demonhsapp.components.Barcode
-import com.prototype.demonhsapp.components.HelpButton
-import com.prototype.demonhsapp.ui.theme.nhsGreenTint
-import com.prototype.demonhsapp.ui.theme.nhsGreenTone
-import com.prototype.demonhsapp.ui.theme.nhsGrey
-import com.prototype.demonhsapp.ui.theme.nhsGrey4
-import com.prototype.demonhsapp.ui.theme.nhsGrey5
-import com.prototype.demonhsapp.ui.theme.nhsRedTint
-import com.prototype.demonhsapp.ui.theme.nhsRedTone
-
+import com.prototype.demonhsapp.components.PrescriptionStatus
+import com.prototype.demonhsapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PrescriptionsDetail(navController: NavController, modifier: Modifier) {
-    val view = LocalView.current
-    val haptics = LocalHapticFeedback.current
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+fun PrescriptionDetail(
+    navController: NavController,
+    medicationName: String = "Amoxicillin",
+    dosage: String = "500mg capsules - Take one three times daily",
+    status: String = "READY",
+    prescribedDate: String = "24 October 2025",
+    prescribedBy: String = "Dr. Sarah Johnson",
+    quantity: String = "21 capsules",
+    modifier: Modifier = Modifier
+) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val listState = rememberLazyListState()
+
+    // Parse status
+    val prescriptionStatus = when (status) {
+        "READY" -> PrescriptionStatus.READY
+        "PENDING" -> PrescriptionStatus.PENDING
+        "COLLECTED" -> PrescriptionStatus.COLLECTED
+        "EXPIRED" -> PrescriptionStatus.EXPIRED
+        else -> PrescriptionStatus.PENDING
+    }
+
+    // Calculate if we should show grey background based on scroll
+    val showGreyBackground = remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 0 ||
+                    (listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset > 100)
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
                 title = {
-                    Text("Your prescription", maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = (24 + (32 - 24)*(1-scrollBehavior.state.collapsedFraction)).sp, fontWeight = FontWeight.Normal)
+                    Text(
+                        medicationName,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.Medium,
+                        color = if (showGreyBackground.value) nhsBlack else Color.White
+                    )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                    }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back to previous screen"
+                            imageVector = Icons.Outlined.Close,
+                            contentDescription = "Close",
+                            tint = if (showGreyBackground.value) nhsBlack else Color.White
                         )
                     }
                 },
-                actions = {
-                    HelpButton()
-                    AccountButton()
-                },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = nhsGrey5, scrolledContainerColor = nhsGrey4.copy(alpha = 0.2f)),
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = if (showGreyBackground.value) nhsGrey5 else prescriptionStatus.color,
+                    scrolledContainerColor = if (showGreyBackground.value) nhsGrey5 else prescriptionStatus.color
+                ),
                 scrollBehavior = scrollBehavior
             )
         },
         bottomBar = {
-
-        },
-        content = { values ->
-            Surface(color = nhsGrey5, modifier = Modifier.fillMaxSize()) {
-                LazyColumn(
-                    modifier = Modifier.padding(values).padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(0.dp)
+            BottomAppBar(
+                containerColor = Color.White,
+                tonalElevation = 8.dp,
+                modifier = Modifier.height(140.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    //Barcode
-                    item() {
+                    Text(
+                        text = "Prescription Reference",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = nhsGrey2,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    // Barcode representation (simplified)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .height(50.dp)
+                            .background(Color.White)
+                            .clip(RoundedCornerShape(4.dp))
+                    ) {
+                        // Simplified barcode pattern using vertical stripes
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            // Generate barcode-like pattern
+                            val pattern = listOf(3, 1, 2, 1, 3, 2, 1, 3, 1, 2, 3, 1, 2, 1, 3, 2, 1, 3, 1, 2, 1, 3, 2, 1, 3)
+                            pattern.forEach { width ->
+                                Box(
+                                    modifier = Modifier
+                                        .width((width * 3).dp)
+                                        .fillMaxHeight()
+                                        .background(nhsBlack)
+                                )
+                                Spacer(modifier = Modifier.width(2.dp))
+                            }
+                        }
+                    }
+                    // Barcode number - generate random 12-digit number
+                    val barcodeNumber = remember {
+                        (100000000000L..999999999999L).random().toString()
+                    }
+                    Text(
+                        text = barcodeNumber.chunked(3).joinToString(" "),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = nhsBlack,
+                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                        modifier = Modifier.padding(top = 4.dp),
+                        letterSpacing = 1.5.sp
+                    )
+                }
+            }
+        },
+        containerColor = nhsGrey5
+    ) { paddingValues ->
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            // Colored header section
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(prescriptionStatus.color)
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp, bottom = 32.dp)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // Status badge
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(12.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.White)
+                            )
+                            Text(
+                                text = prescriptionStatus.displayName,
+                                style = MaterialTheme.typography.titleLarge,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
 
-                        Column () {
-                            Barcode()
+            // Grey section with details
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(nhsGrey5)
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp)
+                ) {
+                    // Prescription Information Card
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        colors = CardDefaults.cardColors(Color.White),
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(20.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Text(
+                                text = "Prescription Information",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = nhsBlack
+                            )
+
+                            // Dosage information
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    Icons.Outlined.Medication,
+                                    contentDescription = null,
+                                    tint = nhsGrey2,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                                Column(
+                                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Text(
+                                        text = "Dosage",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = nhsGrey2,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = dosage,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = nhsBlack,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                            }
+
+                            HorizontalDivider(color = nhsGrey4.copy(alpha = 0.3f))
+
+                            // Quantity information
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    Icons.Outlined.Inventory2,
+                                    contentDescription = null,
+                                    tint = nhsGrey2,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                                Column(
+                                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Text(
+                                        text = "Quantity",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = nhsGrey2,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = quantity,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = nhsBlack,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                            }
+
+                            HorizontalDivider(color = nhsGrey4.copy(alpha = 0.3f))
+
+                            // Single sentence for issued information
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    Icons.Outlined.Info,
+                                    contentDescription = null,
+                                    tint = nhsGrey2,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                                Text(
+                                    text = "Issued on $prescribedDate by $prescribedBy",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = nhsBlack,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            }
                         }
                     }
 
-                    //Section title
-                    item() {
-                        Column (modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
-                            Text("Medicines", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = nhsGrey)
+                    // Instructions Card
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        colors = CardDefaults.cardColors(Color.White),
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(20.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Text(
+                                text = "Important Information",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = nhsBlack
+                            )
+
+                            Text(
+                                text = "• Take this medication exactly as prescribed by your doctor",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = nhsBlack,
+                                lineHeight = 20.sp
+                            )
+
+                            Text(
+                                text = "• Complete the full course even if you feel better",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = nhsBlack,
+                                lineHeight = 20.sp
+                            )
+
+                            Text(
+                                text = "• Store in a cool, dry place away from direct sunlight",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = nhsBlack,
+                                lineHeight = 20.sp
+                            )
+
+                            Text(
+                                text = "• Keep out of reach of children",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = nhsBlack,
+                                lineHeight = 20.sp
+                            )
                         }
                     }
-                    //Start of list
-                    item() {
-                        Column () {
-                            ListItem(
-                                modifier = Modifier.padding(horizontal = 0.dp).clickable(onClick = {
-                                /*TODO*/
-                                }),
-                                colors = ListItemDefaults.colors(Color.Transparent) ,
-                                headlineContent = { Text("Cephalexin 500mg capsules", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 0.dp)) },
-                                overlineContent = {
-                                    Card(
-                                        colors = CardDefaults.cardColors(nhsGreenTint)
-                                    ) { Text("Ready to collect", modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp), color = nhsGreenTone) }
-                                },
-                                trailingContent = { },
-                                supportingContent = {
-                                    Text("Quantity: 28 capsules", modifier = Modifier.padding(bottom = 8.dp, start = 0.dp))
-                                }
 
+                    // Action buttons
+                    if (prescriptionStatus == PrescriptionStatus.READY) {
+                        Button(
+                            onClick = { /* TODO: Navigate to pharmacy */ },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                                .padding(bottom = 8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = nhsBlue
+                            ),
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            Icon(
+                                Icons.Outlined.Place,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp)
                             )
-                            HorizontalDivider(color = nhsGrey4)
-                        }
-                        Column () {
-                            ListItem(
-                                modifier = Modifier.padding(horizontal = 0.dp).clickable(onClick = { /*TODO*/}),
-                                colors = ListItemDefaults.colors(Color.Transparent) ,
-                                headlineContent = { Text("Codeine phosphate 30mg tablets", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 0.dp)) },
-                                overlineContent = {
-                                    Card(
-                                        colors = CardDefaults.cardColors(nhsRedTint)
-                                    ) { Text("Cancelled", modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp), color = nhsRedTone) }
-                                },
-                                trailingContent = { },
-                                supportingContent = {
-                                    Text("Quantity: 10 capsules", modifier = Modifier.padding(bottom = 8.dp, start = 0.dp))
-                                }
-
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                "Find my pharmacy",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Medium
                             )
-                            HorizontalDivider(color = nhsGrey4)
                         }
-                        Column (modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
-                            Text("For instructions on how to take your medicine, read the label on the packet or container.")
-                        }
-
                     }
 
-                    //Section title
-                    item() {
-                        Column (modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
-                            Text("Details", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = nhsGrey)
-                        }
-                    }
-                    //Start of list
-                    item() {
-                        Column () {
-                            ListItem(
-                                modifier = Modifier.padding(horizontal = 0.dp).clickable(onClick = { /*TODO*/}),
-                                colors = ListItemDefaults.colors(Color.Transparent) ,
-                                headlineContent = { Text("Pharmarcy", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 0.dp)) },
-                                overlineContent = { },
-                                trailingContent = { },
-                                supportingContent = {
-                                    Text("Boots Pharmacy\r\nBalham\r\nLondon\r\nSW12 73G\r\n080867766155", modifier = Modifier.padding(bottom = 8.dp, start = 0.dp))
-                                }
-
-                            )
-                            HorizontalDivider(color = nhsGrey4)
-                        }
-                        Column () {
-                            ListItem(
-                                modifier = Modifier.padding(horizontal = 0.dp).clickable(onClick = { /*TODO*/}),
-                                colors = ListItemDefaults.colors(Color.Transparent) ,
-                                headlineContent = { Text("Date prescribed", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 0.dp)) },
-                                overlineContent = { },
-                                trailingContent = { },
-                                supportingContent = {
-                                    Text("18 July 2024", modifier = Modifier.padding(bottom = 8.dp, start = 0.dp))
-                                }
-
-                            )
-                            HorizontalDivider(color = nhsGrey4)
-                        }
-                        Column () {
-                            ListItem(
-                                modifier = Modifier.padding(horizontal = 0.dp).clickable(onClick = { /*TODO*/}),
-                                colors = ListItemDefaults.colors(Color.Transparent) ,
-                                headlineContent = { Text("Prescribed by", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 0.dp)) },
-                                overlineContent = { },
-                                trailingContent = { },
-                                supportingContent = {
-                                    Text("Dr. Smith", modifier = Modifier.padding(bottom = 8.dp, start = 0.dp))
-                                }
-
-                            )
-                            HorizontalDivider(color = nhsGrey4)
-                        }
-                        Column () {
-                            ListItem(
-                                modifier = Modifier.padding(horizontal = 0.dp).clickable(onClick = { /*TODO*/}),
-                                colors = ListItemDefaults.colors(Color.Transparent) ,
-                                headlineContent = { Text("Organisation", modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 0.dp)) },
-                                overlineContent = { },
-                                trailingContent = { },
-                                supportingContent = {
-                                    Text("York Road Practice", modifier = Modifier.padding(bottom = 8.dp, start = 0.dp))
-                                }
-
-                            )
-                            HorizontalDivider(color = nhsGrey4)
-                        }
-
+                    OutlinedButton(
+                        onClick = { /* TODO: Contact GP */ },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .padding(bottom = 16.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = nhsBlue
+                        ),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Icon(
+                            Icons.Outlined.ContactPage,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            "Contact GP surgery",
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Medium
+                        )
                     }
 
-
-
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         }
-    )
+    }
 }
 
-@Preview (showSystemUi = true, backgroundColor = 0xFFF0F4F5)
+@Preview(showSystemUi = true)
 @Composable
-fun PrescriptionsDetailPreview(){
-    PrescriptionsDetail(rememberNavController(), modifier = Modifier)
+fun PrescriptionDetailPreview() {
+    PrescriptionDetail(
+        navController = rememberNavController(),
+        medicationName = "Amoxicillin",
+        dosage = "500mg capsules - Take one three times daily",
+        status = "READY",
+        prescribedDate = "24 October 2025",
+        prescribedBy = "Dr. Sarah Johnson",
+        quantity = "21 capsules"
+    )
 }

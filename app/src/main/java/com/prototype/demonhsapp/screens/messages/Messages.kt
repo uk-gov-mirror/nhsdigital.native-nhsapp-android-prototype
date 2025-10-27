@@ -109,8 +109,7 @@ fun Messages(
                         text = if (unreadCount > 0) "Messages ($unreadCount)" else "Messages",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        fontSize = (24 + (32 - 24) * (1 - scrollBehavior.state.collapsedFraction)).sp,
-                        fontWeight = FontWeight.Normal
+                        fontWeight = FontWeight.Medium
                     )
                 },
                 actions = {
