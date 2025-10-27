@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.prototype.demonhsapp.ui.theme.DemoNHSAppTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -21,8 +22,10 @@ import demonhsappkmm.composeapp.generated.resources.compose_multiplatform
 
 @Composable
 @Preview
-fun App() {
-    MaterialTheme {
+fun App(context: Any? = null,
+        darkTheme: Boolean,
+        dynamicColor: Boolean = false) {
+    DemoNHSAppTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
         var showContent by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
