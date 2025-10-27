@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.nhs.online.nhsonline.design.components.BadgeIcon
 import com.nhs.online.nhsonline.design.theme.nhsGrey
 
 @Composable
@@ -36,23 +37,14 @@ fun BottomBar(navController: NavController) {
                     }
                 },
                 icon = {
-                    BadgedBox(
-                        badge = {
-                            if (item.badgeCount > 0) {
-                                Badge {
-                                    Text(item.badgeCount.toString())
-                                }
-                            }
-                        }
-                    ) {
-                        Icon(
-                            imageVector = if (selected)
-                                item.selectedIcon
-                            else
-                                item.unselectedIcon,
-                            contentDescription = item.label
-                        )
-                    }
+                    BadgeIcon(
+                        imageVector = if (selected)
+                            item.selectedIcon
+                        else
+                            item.unselectedIcon,
+                        badgeCount = item.badgeCount,
+                        contentDescription = item.label
+                    )
                 },
                 label = { Text(item.label) },
                 alwaysShowLabel = true,
