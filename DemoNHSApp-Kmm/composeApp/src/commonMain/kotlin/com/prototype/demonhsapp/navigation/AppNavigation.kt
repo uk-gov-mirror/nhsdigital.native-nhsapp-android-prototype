@@ -47,11 +47,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.prototype.demonhsapp.screens.ScreenA
 import com.prototype.demonhsapp.screens.ScreenB
 import com.prototype.demonhsapp.screens.accountsettings.AccountSettings
 import com.prototype.demonhsapp.screens.home.Home
 import com.prototype.demonhsapp.screens.messages.MessageDetail
+import com.prototype.demonhsapp.screens.messages.Messages
 import com.prototype.demonhsapp.screens.messages.yourmessages.YourMessages
 import com.prototype.demonhsapp.screens.services.Services
 import com.prototype.demonhsapp.screens.services.prescriptions.Prescriptions
@@ -217,7 +219,7 @@ fun AppNavigation(){
 
                     // Main destinations - 3 primary screens
                     composable(route = "home", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Home(navController, modifier = Modifier) }
-                    //composable(route = "messages", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Messages(navController, messagesViewModel, modifier = Modifier) }
+                    composable(route = "messages", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ Messages(navController, modifier = Modifier) }
                     composable(route = "profile", enterTransition = { fadeIn(animationSpec = tween(300, easing = LinearEasing)) }, exitTransition = { fadeOut(animationSpec = tween(300, easing = LinearEasing)) } ){ AccountSettings(navController, modifier = Modifier) }
 
                     // Additional screens accessible from main destinations
@@ -235,18 +237,26 @@ fun AppNavigation(){
                     composable(route = Routes.referrals){ Referrals(navController, modifier = Modifier) }
 
                     // Message Detail with argument
-                    composable(
-                        route = "message_detail/{messageId}",
-                        arguments = listOf(
-                            navArgument("messageId") {
-                                type = NavType.StringType
-                            }
-                        )
-                    ) { backStackEntry ->
-                        val messageId = "12345"
+//                    composable(
+//                        route = "message_detail/{messageId}",
+//                        arguments = listOf(
+//                            navArgument("messageId") {
+//                                type = NavType.StringType
+//                            }
+//                        )
+//                    ) { backStackEntry ->
+//                        val messageId = backStackEntry.path<String>("messageId") ?: ""
+//                        MessageDetail(
+//                            navController = navController,
+//                            messageId = messageId
+//                        )
+//                    }
+
+                    composable<MessageDetailRoute> { backStackEntry ->
+                        val args: MessageDetailRoute = backStackEntry.toRoute()
                         MessageDetail(
                             navController = navController,
-                            messageId = messageId
+                            messageId = args.messageId
                         )
                     }
 

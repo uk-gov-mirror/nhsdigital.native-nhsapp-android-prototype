@@ -1,5 +1,7 @@
 package com.prototype.demonhsapp.navigation
 
+import kotlinx.serialization.Serializable
+
 object Routes {
     var screenA = "screen_A"
     var screenB = "screen_B"
@@ -30,3 +32,6 @@ object Routes {
     // Helper function to create route with message ID
     fun messageDetailRoute(messageId: String) = "message_detail/$messageId"
 }
+
+@Serializable
+data class MessageDetailRoute(val messageId: String)

@@ -135,7 +135,7 @@ fun MessageDetail(
 
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = "Sender",
+                                        text = message.sender,
                                         style = MaterialTheme.typography.bodyLarge,
                                         fontWeight = FontWeight.SemiBold,
                                         color = nhsBlack
@@ -148,7 +148,7 @@ fun MessageDetail(
                                 }
 
                                 Text(
-                                    text = "15:30",
+                                    text = message.timestamp,
                                     style = MaterialTheme.typography.bodySmall,
                                     color = nhsGrey
                                 )
@@ -355,85 +355,6 @@ fun getFullMessageContent(message: Message): String {
 
         else -> message.preview
     }
-}
-
-data class Message(
-    val id: String,
-    val sender: String,
-    val subject: String,
-    val preview: String,
-    val timestamp: String,
-    val isRead: Boolean = false,
-    val isImportant: Boolean = false
-)
-
-fun getSampleMessages(): List<Message> {
-    return listOf(
-        Message(
-            id = "1",
-            sender = "NHS Leeds Teaching Hospitals",
-            subject = "Appointment Confirmation",
-            preview = "Your appointment has been confirmed for 15th November at 10:00 AM in the Cardiology Department.",
-            timestamp = "9:30 AM",
-            isRead = false
-        ),
-        Message(
-            id = "2",
-            sender = "Dr Sarah Johnson",
-            subject = "Test Results Available",
-            preview = "Your recent blood test results are now available to view. Please log in to your account to see the details.",
-            timestamp = "Yesterday",
-            isRead = false
-        ),
-        Message(
-            id = "3",
-            sender = "Oak Tree Surgery",
-            subject = "Prescription Ready",
-            preview = "Your repeat prescription is ready for collection at the pharmacy. Please collect within 7 days.",
-            timestamp = "2 days ago",
-            isRead = true
-        ),
-        Message(
-            id = "4",
-            sender = "NHS App Team",
-            subject = "New Feature: Video Consultations",
-            preview = "You can now book video consultations with your GP through the NHS App. Tap here to learn more.",
-            timestamp = "Nov 1",
-            isRead = true
-        ),
-        Message(
-            id = "5",
-            sender = "Manchester Royal Infirmary",
-            subject = "Follow-up Appointment Needed",
-            preview = "Please contact us to schedule your follow-up appointment following your recent consultation.",
-            timestamp = "Oct 28",
-            isRead = true
-        ),
-        Message(
-            id = "6",
-            sender = "Vaccination Centre",
-            subject = "Flu Jab Reminder",
-            preview = "It's that time of year again. Book your flu vaccination appointment at your local pharmacy.",
-            timestamp = "Oct 25",
-            isRead = true
-        ),
-        Message(
-            id = "7",
-            sender = "Dr Michael Chen",
-            subject = "Medication Review Due",
-            preview = "Your annual medication review is due. Please book an appointment with reception at your convenience.",
-            timestamp = "Oct 20",
-            isRead = true
-        ),
-        Message(
-            id = "8",
-            sender = "NHS 111",
-            subject = "Your Recent Query",
-            preview = "Thank you for using NHS 111 online. Based on your symptoms, we recommend you contact your GP surgery.",
-            timestamp = "Oct 15",
-            isRead = true
-        )
-    )
 }
 
 @Preview
