@@ -65,13 +65,15 @@ fun PrescriptionStartRepeat(navController: NavController, modifier: Modifier = M
         bottomBar = {
             BottomAppBar(
                 containerColor = nhsGrey5,
-                tonalElevation = 0.dp
+                tonalElevation = 0.dp,
+                modifier = Modifier.height(100.dp)
             ) {
                 Button(
                     onClick = { navController.navigate("prescriptionFormRepeat") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .height(56.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = nhsGreen
                     )
@@ -126,48 +128,36 @@ fun PrescriptionStartRepeat(navController: NavController, modifier: Modifier = M
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface
+                        containerColor = nhsLightBlue
                     ),
                     shape = MaterialTheme.shapes.small
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.Top
                     ) {
-                        // Important header with nhsYellow background
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(nhsYellow)
-                                .padding(16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = null,
+                            tint = nhsBlack,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Warning,
-                                contentDescription = null,
-                                tint = nhsBlack,
-                                modifier = Modifier.size(24.dp)
-                            )
                             Text(
                                 text = "Important",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = nhsBlack
                             )
-                        }
-
-                        // Information text with nhsPaleYellow background
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(nhsPaleYellow)
-                                .padding(16.dp)
-                        ) {
                             Text(
                                 text = "Please allow 48 hours notice. Your GP may contact you to discuss your request.",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = nhsBlack,
-                                modifier = Modifier.padding(start = 36.dp) // Align with text after icon
+                                color = nhsBlack
                             )
                         }
                     }

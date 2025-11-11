@@ -147,7 +147,7 @@ fun Prescriptions2(navController: NavController, modifier: Modifier = Modifier) 
                                     text = { Text("Repeat prescription") },
                                     onClick = {
                                         showRequestMenu = false
-                                        navController.navigate("prescriptionFormRepeat")
+                                        navController.navigate("prescriptionStartRepeat")
                                     },
                                     leadingIcon = {
                                         Icon(
