@@ -13,9 +13,9 @@ android {
     defaultConfig {
         applicationId = "com.prototype.nhsappdv1"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 12
-        versionName = "12.0"
+        targetSdk = 35
+        versionCode = 13
+        versionName = "13.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

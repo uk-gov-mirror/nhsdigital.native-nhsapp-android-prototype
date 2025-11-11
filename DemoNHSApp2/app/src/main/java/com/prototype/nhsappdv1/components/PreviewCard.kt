@@ -1,23 +1,31 @@
 package com.prototype.nhsappdv1.components
 
-
-
+import android.view.SoundEffectConstants
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.prototype.nhsappdv1.ui.theme.nhsDarkBlue
+import com.prototype.nhsappdv1.ui.theme.nhsLightBlue
 import com.prototype.nhsappdv1.ui.theme.nhsYellow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -286,6 +294,65 @@ fun TestResultWidgetCard(
     }
 }
 
+@Composable
+fun MenuWidgetCard(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .width(280.dp)
+            .height(180.dp)
+            .padding(8.dp),
+        onClick = onClick,
+        colors = CardDefaults.cardColors(
+            containerColor = nhsLightBlue
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp
+        )
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Icon at top
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = nhsDarkBlue,
+                    modifier = Modifier.size(32.dp)
+                )
+
+                // Text content at bottom
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = nhsDarkBlue
+                    )
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = nhsDarkBlue.copy(alpha = 0.85f),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        }
+    }
+}
+
 
 data class CardData(
     val headline: String,
@@ -501,6 +568,168 @@ fun TestResultTrendPreview() {
                 resultDate = "Last 7 days",
                 chartData = listOf(0.5f, 0.6f, 0.55f, 0.5f, 0.48f, 0.52f, 0.5f)
             )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Menu Widget Card - Prescriptions")
+@Composable
+fun MenuWidgetCardPrescriptionsPreview() {
+    MaterialTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            MenuWidgetCard(
+                icon = Icons.Outlined.Medication,
+                title = "Prescriptions",
+                subtitle = "Order and track prescriptions",
+                onClick = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Menu Widget Card - Appointments")
+@Composable
+fun MenuWidgetCardAppointmentsPreview() {
+    MaterialTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            MenuWidgetCard(
+                icon = Icons.Outlined.CalendarMonth,
+                title = "Appointments",
+                subtitle = "View and manage appointments",
+                onClick = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Menu Widget Cards Grid", heightDp = 800)
+@Composable
+fun MenuWidgetCardsGridPreview() {
+    val view = LocalView.current
+    val haptics = LocalHapticFeedback.current
+
+    MaterialTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    MenuWidgetCard(
+                        icon = Icons.Outlined.Medication,
+                        title = "Prescriptions",
+                        subtitle = "Order and track prescriptions",
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    MenuWidgetCard(
+                        icon = Icons.Outlined.CalendarMonth,
+                        title = "Appointments",
+                        subtitle = "View and manage appointments",
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    MenuWidgetCard(
+                        icon = Icons.Outlined.Science,
+                        title = "Test Results",
+                        subtitle = "View your test results",
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    MenuWidgetCard(
+                        icon = Icons.Outlined.Vaccines,
+                        title = "Vaccinations",
+                        subtitle = "View vaccination records",
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    MenuWidgetCard(
+                        icon = Icons.Outlined.Description,
+                        title = "Documents",
+                        subtitle = "Access health documents",
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    MenuWidgetCard(
+                        icon = Icons.Outlined.LocalHospital,
+                        title = "NHS 111 Online",
+                        subtitle = "Check if you need urgent help",
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    MenuWidgetCard(
+                        icon = Icons.Outlined.MenuBook,
+                        title = "Health A-Z",
+                        subtitle = "Browse conditions and treatments",
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    MenuWidgetCard(
+                        icon = Icons.Outlined.LocationOn,
+                        title = "NHS Services",
+                        subtitle = "Find services near you",
+                        onClick = {
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
         }
     }
 }

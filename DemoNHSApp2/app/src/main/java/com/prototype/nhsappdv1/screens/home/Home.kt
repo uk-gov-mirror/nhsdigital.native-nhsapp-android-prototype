@@ -1,27 +1,51 @@
 package com.prototype.nhsappdv1.screens.home
 
 import android.view.SoundEffectConstants
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.LocalHospital
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Medication
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Science
+import androidx.compose.material.icons.outlined.Vaccines
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -29,45 +53,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.prototype.nhsappdv1.components.*
+import com.prototype.nhsappdv1.R
+import com.prototype.nhsappdv1.components.AppointmentWidgetCard
+import com.prototype.nhsappdv1.components.MenuWidgetCard
+import com.prototype.nhsappdv1.components.TestResultWidgetCard
+import com.prototype.nhsappdv1.components.WidgetCard
 import com.prototype.nhsappdv1.navigation.Routes
-import com.prototype.nhsappdv1.ui.theme.*
+import com.prototype.nhsappdv1.ui.theme.nhsBlue
+import com.prototype.nhsappdv1.ui.theme.nhsDarkBlue
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import com.prototype.nhsappdv1.R
+import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun Home(navController: NavController, modifier: Modifier) {
     val view = LocalView.current
     val haptics = LocalHapticFeedback.current
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    val listState = rememberLazyListState()
-
-    // Get screen configuration for height calculation
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp
-    val blueSectionHeight = screenHeight * 0.5f
-
-    // Get today's date
-    val today = LocalDate.now()
-    val dateFormatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", Locale.UK)
-    val formattedDate = today.format(dateFormatter)
-
-    // Calculate if we should show grey background based on scroll
-    val showGreyBackground = remember {
-        derivedStateOf {
-            listState.firstVisibleItemIndex > 0 ||
-                    (listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset > 400)
-        }
-    }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier,
         topBar = {
             LargeTopAppBar(
                 title = {
@@ -77,454 +87,474 @@ fun Home(navController: NavController, modifier: Modifier) {
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight.Medium,
-                            color = if (showGreyBackground.value) nhsBlack else Color.White,
-                            fontSize = (20 + (28 - 20) * (1 - scrollBehavior.state.collapsedFraction)).sp
+                            color = Color.White
                         )
-                        if (scrollBehavior.state.collapsedFraction < 0.5f) {
-                            Text(
-                                formattedDate,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = if (showGreyBackground.value) nhsGrey else Color.White.copy(alpha = 0.9f),
-                                modifier = Modifier.padding(top = 4.dp)
-                            )
-                        }
+                        Text(
+                            LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault())),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.White.copy(alpha = 0.9f),
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
                     }
                 },
                 navigationIcon = {
-                    // NHS Logo - only visible when expanded
-                    if (scrollBehavior.state.collapsedFraction < 0.5f) {
-                        Image(
-                            painter = painterResource(id = R.drawable.nhs_logo_2),
-                            contentDescription = "NHS Logo",
-                            modifier = Modifier
-                                .padding(start = 16.dp)
-                                .size(48.dp),
-                            contentScale = ContentScale.Fit
-                        )
-                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.nhs_logo_2),
+                        contentDescription = "NHS Logo",
+                        modifier = Modifier
+                            .padding(start = 16.dp)
+                            .size(48.dp),
+                        contentScale = ContentScale.Fit
+                    )
                 },
                 actions = {
 
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = if (showGreyBackground.value) nhsGrey5 else nhsBlue,
-                    scrolledContainerColor = if (showGreyBackground.value) nhsGrey5 else nhsBlue,
-                    actionIconContentColor = if (showGreyBackground.value) nhsBlack else Color.White
-                ),
-                scrollBehavior = scrollBehavior
+                    containerColor = nhsBlue,
+                    scrolledContainerColor = nhsBlue,
+                    actionIconContentColor = Color.White
+                )
             )
         },
-        containerColor = nhsGrey5
+        containerColor = Color.Transparent
     ) { paddingValues ->
-        LazyColumn(
-            state = listState,
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Blue Gradient Header Section
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(blueSectionHeight)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(nhsBlue, nhsDarkBlue)
-                            )
+            // Full screen Blue Gradient Section with vertical pager
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(nhsBlue, nhsDarkBlue)
                         )
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 16.dp, bottom = 24.dp)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .graphicsLayer {
-                                // Parallax effect - content moves slower than scroll
-                                val scrollOffset = if (listState.firstVisibleItemIndex == 0) {
-                                    listState.firstVisibleItemScrollOffset.toFloat()
-                                } else {
-                                    0f
-                                }
-                                translationY = scrollOffset * 0.5f
+                    )
+            ) {
+                VerticalPagerCards(
+                    navController = navController,
+                    view = view,
+                    haptics = haptics
+                )
+            }
+        }
+    }
+}
 
-                                // Fade out effect as you scroll
-                                alpha = (1f - (scrollOffset / 500f)).coerceIn(0f, 1f)
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun VerticalPagerCards(
+    navController: NavController,
+    view: android.view.View,
+    haptics: androidx.compose.ui.hapticfeedback.HapticFeedback
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
-                                // Scale down effect - content shrinks as you scroll
-                                val scale = (1f - (scrollOffset / 1000f)).coerceIn(0.8f, 1f)
-                                scaleX = scale
-                                scaleY = scale
-                            },
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        // Widget Cards Lazy Row with mixed card types
-                        val widgetListState = rememberLazyListState()
+    // All widget items
+    val widgetItems = remember {
+        listOf(
+            WidgetItem.PrescriptionWidget,
+            WidgetItem.AppointmentWidget,
+            WidgetItem.TestResultWidget,
+            WidgetItem.HealthGoalsWidget,
+            WidgetItem.PrescriptionService(navController, view, haptics),
+            WidgetItem.AppointmentService(navController, view, haptics),
+            WidgetItem.TestResultService(view, haptics),
+            WidgetItem.VaccinationService(view, haptics),
+            WidgetItem.DocumentService(view, haptics),
+            WidgetItem.NHS111Info(context, view, haptics),
+            WidgetItem.HealthAtoZInfo(context, view, haptics),
+            WidgetItem.NHSServicesInfo(context, view, haptics)
+        )
+    }
 
-                        // Track scroll position and trigger haptics on card change
-                        LaunchedEffect(widgetListState) {
-                            var previousFirstVisibleIndex = 0
+    val pagerState = rememberPagerState(pageCount = { widgetItems.size })
 
-                            snapshotFlow { widgetListState.firstVisibleItemIndex }
-                                .collect { currentIndex ->
-                                    if (currentIndex != previousFirstVisibleIndex) {
-                                        haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                        previousFirstVisibleIndex = currentIndex
-                                    }
-                                }
+    // Track page changes for haptic feedback
+    LaunchedEffect(pagerState.currentPage) {
+        if (pagerState.currentPage >= 0) {
+            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+        }
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+
+        // Invisible pager for swipe detection
+        VerticalPager(
+            state = pagerState,
+            modifier = Modifier
+                .matchParentSize()
+                .zIndex(0f), // sits behind
+            userScrollEnabled = true
+        ) { page ->
+        }
+
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .pointerInput(pagerState) {
+                    detectVerticalDragGestures(
+                        onVerticalDrag = { _, dragAmount ->
+                            scope.launch {
+                                // pager scroll is inverted
+                                // dragAmount > 0 means dragging DOWN
+                                pagerState.scrollBy(-dragAmount * 5f)
+                            }
+                        },
+                        onDragEnd = {
+                            scope.launch {
+                                // snap to nearest page
+                                val offset = pagerState.currentPageOffsetFraction
+                                val target = when {
+                                    offset > 0.5f -> pagerState.currentPage + 1
+                                    offset < -0.5f -> pagerState.currentPage - 1
+                                    else -> pagerState.currentPage
+                                }.coerceIn(0, widgetItems.lastIndex)
+                                pagerState.animateScrollToPage(target)
+                            }
                         }
+                    )
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            // Render all cards in the same Box space to create stacking effect
+            // Render background cards first, then current card last (on top)
 
-                        LazyRow(
-                            state = widgetListState,
+            // First render all non-current cards
+            widgetItems.indices.forEach { index ->
+                if (index != pagerState.currentPage) {
+                    val item = widgetItems[index]
+                    val pageOffset = (pagerState.currentPage - index).toFloat() + pagerState.currentPageOffsetFraction
+
+                    // Only render visible cards (previous, next)
+                    if (pageOffset.absoluteValue <= 2f) {
+                        StackedCardInPager(
+                            item = item,
+                            pageOffset = pageOffset,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(blueSectionHeight * 0.75f),
-                            contentPadding = PaddingValues(horizontal = 0.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Prescriptions card
-                            item {
-                                WidgetCard(
-                                    headline = "Prescriptions",
-                                    subheadline = "2 ready to collect",
-                                    progress = 0.67f,
-                                    modifier = Modifier
-                                        .width(280.dp)
-                                        .fillMaxHeight()
-                                )
-                            }
-
-                            // Appointments card
-                            item {
-                                AppointmentWidgetCard(
-                                    headline = "Next Appointment",
-                                    appointmentTime = "10:00 AM",
-                                    appointmentDate = "Tomorrow, 26 October",
-                                    location = "St. Mary's Hospital",
-                                    modifier = Modifier
-                                        .width(280.dp)
-                                        .fillMaxHeight()
-                                )
-                            }
-
-                            // Test Results card
-                            item {
-                                TestResultWidgetCard(
-                                    headline = "Latest Test Result",
-                                    testName = "Blood Glucose",
-                                    result = "5.8 mmol/L",
-                                    resultDate = "Tested 24 October",
-                                    chartData = listOf(0.4f, 0.6f, 0.5f, 0.7f, 0.65f, 0.8f, 0.7f),
-                                    modifier = Modifier
-                                        .width(280.dp)
-                                        .fillMaxHeight()
-                                )
-                            }
-
-                            // Health Goals card
-                            item {
-                                WidgetCard(
-                                    headline = "Health Goals",
-                                    subheadline = "7,500 of 10,000 steps",
-                                    progress = 0.75f,
-                                    modifier = Modifier
-                                        .width(280.dp)
-                                        .fillMaxHeight()
-                                )
-                            }
-
-                            // Vaccinations card
-                            item {
-                                WidgetCard(
-                                    headline = "Vaccinations",
-                                    subheadline = "Up to date",
-                                    progress = 1.0f,
-                                    modifier = Modifier
-                                        .width(280.dp)
-                                        .fillMaxHeight()
-                                )
-                            }
-                        }
+                                .fillMaxWidth(0.9f)
+                                .fillMaxHeight(0.65f)
+                        )
                     }
                 }
             }
 
-            // Grey Background Section
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(nhsGrey5)
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 16.dp)
-                ) {
-                    // Main Services Card
-                    Card(
-                        Modifier.padding(bottom = 16.dp),
-                        colors = CardDefaults.cardColors(Color.White),
-                        shape = RoundedCornerShape(28.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-                    ) {
-                        Column {
-                            ListItem(
-                                modifier = Modifier
-                                    .clickable(onClick = {
-                                        navController.navigate(Routes.prescriptions2)
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    })
-                                    .padding(vertical = 8.dp),
-                                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                                leadingContent = {
-                                    Icon(
-                                        Icons.Outlined.Medication,
-                                        contentDescription = null,
-                                        tint = nhsGrey,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                },
-                                headlineContent = {
-                                    Text(
-                                        "Prescriptions",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontWeight = FontWeight.Normal,
-                                        color = nhsBlack
-                                    )
-                                },
-                                supportingContent = {
-                                    Text(
-                                        "Order and track prescriptions",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = nhsGrey
-                                    )
-                                },
-                                trailingContent = {
-                                    Icon(
-                                        Icons.Outlined.ChevronRight,
-                                        contentDescription = null,
-                                        tint = nhsGrey2,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                },
-                                tonalElevation = 0.dp
-                            )
-                            HorizontalDivider(
-                                color = nhsGrey4.copy(alpha = 0.3f),
-                                modifier = Modifier.padding(horizontal = 16.dp)
-                            )
+            // Then render current card last so it's on top
+            val currentItem = widgetItems[pagerState.currentPage]
+            StackedCardInPager(
+                item = currentItem,
+                pageOffset = pagerState.currentPageOffsetFraction,
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .fillMaxHeight(0.65f)
+            )
+        }
+    }
+}
 
-                            ListItem(
-                                modifier = Modifier
-                                    .clickable(onClick = {
-                                        navController.navigate(Routes.upcomingAndAastAppointments)
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    })
-                                    .padding(vertical = 8.dp),
-                                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                                leadingContent = {
-                                    Icon(
-                                        Icons.Outlined.CalendarMonth,
-                                        contentDescription = null,
-                                        tint = nhsGrey,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                },
-                                headlineContent = {
-                                    Text(
-                                        "Appointments",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontWeight = FontWeight.Normal,
-                                        color = nhsBlack
-                                    )
-                                },
-                                supportingContent = {
-                                    Text(
-                                        "View and manage appointments",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = nhsGrey
-                                    )
-                                },
-                                trailingContent = {
-                                    Icon(
-                                        Icons.Outlined.ChevronRight,
-                                        contentDescription = null,
-                                        tint = nhsGrey2,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                },
-                                tonalElevation = 0.dp
-                            )
-                            HorizontalDivider(
-                                color = nhsGrey4.copy(alpha = 0.3f),
-                                modifier = Modifier.padding(horizontal = 16.dp)
-                            )
+@Composable
+fun StackedCardInPager(
+    item: WidgetItem,
+    pageOffset: Float,
+    modifier: Modifier = Modifier
+) {
+    // Calculate animations based on page position and transition direction
+    // pageOffset > 0 means this page is BEFORE current (swipe down shows it)
+    // pageOffset < 0 means this page is AFTER current (swipe up shows it)
 
-                            ListItem(
-                                modifier = Modifier
-                                    .clickable(onClick = {
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    })
-                                    .padding(vertical = 8.dp),
-                                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                                leadingContent = {
-                                    Icon(
-                                        Icons.Outlined.Science,
-                                        contentDescription = null,
-                                        tint = nhsGrey,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                },
-                                headlineContent = {
-                                    Text(
-                                        "Test results",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontWeight = FontWeight.Normal,
-                                        color = nhsBlack
-                                    )
-                                },
-                                supportingContent = {
-                                    Text(
-                                        "View your test results",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = nhsGrey
-                                    )
-                                },
-                                trailingContent = {
-                                    Icon(
-                                        Icons.Outlined.ChevronRight,
-                                        contentDescription = null,
-                                        tint = nhsGrey2,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                },
-                                tonalElevation = 0.dp
-                            )
-                            HorizontalDivider(
-                                color = nhsGrey4.copy(alpha = 0.3f),
-                                modifier = Modifier.padding(horizontal = 16.dp)
-                            )
+    val translationY = when {
+        // Card transitioning out - being swiped away
+        pageOffset > 0 && pageOffset <= 1 -> {
+            // Previous page coming into view (swipe down gesture)
+            // Current card goes UP and behind
+            -200f * pageOffset
+        }
+        pageOffset < 0 && pageOffset >= -1 -> {
+            // Next page coming into view (swipe up gesture)
+            // Current card goes DOWN and behind
+            -200f * pageOffset // This will be positive (going down)
+        }
+        // Cards in stack position
+        pageOffset > 1 -> -80f // Previous cards stacked above
+        pageOffset < -1 -> 80f // Next cards stacked below
+        else -> 0f // Current card at center
+    }
 
-                            ListItem(
-                                modifier = Modifier
-                                    .clickable(onClick = {
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    })
-                                    .padding(vertical = 8.dp),
-                                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                                leadingContent = {
-                                    Icon(
-                                        Icons.Outlined.Vaccines,
-                                        contentDescription = null,
-                                        tint = nhsGrey,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                },
-                                headlineContent = {
-                                    Text(
-                                        "Vaccinations",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontWeight = FontWeight.Normal,
-                                        color = nhsBlack
-                                    )
-                                },
-                                supportingContent = {
-                                    Text(
-                                        "View your vaccination records",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = nhsGrey
-                                    )
-                                },
-                                trailingContent = {
-                                    Icon(
-                                        Icons.Outlined.ChevronRight,
-                                        contentDescription = null,
-                                        tint = nhsGrey2,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                },
-                                tonalElevation = 0.dp
-                            )
-                            HorizontalDivider(
-                                color = nhsGrey4.copy(alpha = 0.3f),
-                                modifier = Modifier.padding(horizontal = 16.dp)
-                            )
+    // Scale animation - current card is ALWAYS largest
+    val scale = when {
+        // Current card - always full size
+        pageOffset == 0f -> 1f
 
-                            ListItem(
-                                modifier = Modifier
-                                    .clickable(onClick = {
-                                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                                    })
-                                    .padding(vertical = 8.dp),
-                                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                                leadingContent = {
-                                    Icon(
-                                        Icons.Outlined.Description,
-                                        contentDescription = null,
-                                        tint = nhsGrey,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                },
-                                headlineContent = {
-                                    Text(
-                                        "Documents",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontWeight = FontWeight.Normal,
-                                        color = nhsBlack
-                                    )
-                                },
-                                supportingContent = {
-                                    Text(
-                                        "Access your health documents",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = nhsGrey
-                                    )
-                                },
-                                trailingContent = {
-                                    Icon(
-                                        Icons.Outlined.ChevronRight,
-                                        contentDescription = null,
-                                        tint = nhsGrey2,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                },
-                                tonalElevation = 0.dp
-                            )
-                        }
-                    }
+        // Card transitioning out (being swiped away)
+        pageOffset > 0 && pageOffset <= 1 -> {
+            1f - (pageOffset * 0.15f) // Shrinks from 1.0 to 0.85
+        }
+        pageOffset < 0 && pageOffset >= -1 -> {
+            1f - ((-pageOffset) * 0.15f) // Shrinks from 1.0 to 0.85
+        }
 
-                    // Section title for NHS web links
-                    Text(
-                        text = "NHS information and support",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                        color = nhsBlack
-                    )
+        // Cards in stack - smaller
+        else -> 0.85f
+    }
 
-                    // NHS Web Links List
-                    Card(
-                        Modifier.padding(bottom = 16.dp),
-                        colors = CardDefaults.cardColors(Color.White),
-                        shape = RoundedCornerShape(28.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-                    ) {
-                        ChromeCustomTab(
-                            text = "Check if you need urgent medical help using 111 online",
-                            url = "https://111.nhs.uk"
-                        )
-                        ChromeCustomTab(
-                            text = "Health A to Z - Browse conditions and treatments",
-                            url = "https://www.nhs.uk/health-a-to-z/"
-                        )
-                        ChromeCustomTab(
-                            text = "NHS Services - Find services near you",
-                            url = "https://www.nhs.uk/nhs-services/",
-                            showDivider = false
-                        )
-                    }
+    Box(
+        modifier = modifier
+            .graphicsLayer {
+                this.translationY = translationY
+                this.scaleX = scale
+                this.scaleY = scale
+            }
+            .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        when (item) {
+            is WidgetItem.PrescriptionWidget -> {
+                WidgetCard(
+                    headline = "Prescriptions",
+                    subheadline = "2 ready to collect",
+                    progress = 0.67f,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.AppointmentWidget -> {
+                AppointmentWidgetCard(
+                    headline = "Next Appointment",
+                    appointmentTime = "10:00 AM",
+                    appointmentDate = "Tomorrow, 26 October",
+                    location = "St. Mary's Hospital",
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.TestResultWidget -> {
+                TestResultWidgetCard(
+                    headline = "Latest Test Result",
+                    testName = "Blood Glucose",
+                    result = "5.8 mmol/L",
+                    resultDate = "Tested 24 October",
+                    chartData = listOf(0.4f, 0.6f, 0.5f, 0.7f, 0.65f, 0.8f, 0.7f),
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.HealthGoalsWidget -> {
+                WidgetCard(
+                    headline = "Health Goals",
+                    subheadline = "7,500 of 10,000 steps",
+                    progress = 0.75f,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.PrescriptionService -> {
+                MenuWidgetCard(
+                    icon = Icons.Outlined.Medication,
+                    title = "Prescriptions",
+                    subtitle = "Order and track prescriptions",
+                    onClick = item.onClick,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.AppointmentService -> {
+                MenuWidgetCard(
+                    icon = Icons.Outlined.CalendarMonth,
+                    title = "Appointments",
+                    subtitle = "View and manage appointments",
+                    onClick = item.onClick,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.TestResultService -> {
+                MenuWidgetCard(
+                    icon = Icons.Outlined.Science,
+                    title = "Test Results",
+                    subtitle = "View your test results",
+                    onClick = item.onClick,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.VaccinationService -> {
+                MenuWidgetCard(
+                    icon = Icons.Outlined.Vaccines,
+                    title = "Vaccinations",
+                    subtitle = "View your vaccination records",
+                    onClick = item.onClick,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.DocumentService -> {
+                MenuWidgetCard(
+                    icon = Icons.Outlined.Description,
+                    title = "Documents",
+                    subtitle = "Access your health documents",
+                    onClick = item.onClick,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.NHS111Info -> {
+                MenuWidgetCard(
+                    icon = Icons.Outlined.LocalHospital,
+                    title = "NHS 111 Online",
+                    subtitle = "Check if you need urgent medical help",
+                    onClick = item.onClick,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.HealthAtoZInfo -> {
+                MenuWidgetCard(
+                    icon = Icons.Outlined.MenuBook,
+                    title = "Health A to Z",
+                    subtitle = "Browse conditions and treatments",
+                    onClick = item.onClick,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is WidgetItem.NHSServicesInfo -> {
+                MenuWidgetCard(
+                    icon = Icons.Outlined.LocationOn,
+                    title = "NHS Services",
+                    subtitle = "Find services near you",
+                    onClick = item.onClick,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        }
+    }
+}
 
-                    Spacer(modifier = Modifier.height(32.dp))
-                }
+// Sealed class to represent different widget types
+sealed class WidgetItem {
+    data object PrescriptionWidget : WidgetItem()
+    data object AppointmentWidget : WidgetItem()
+    data object TestResultWidget : WidgetItem()
+    data object HealthGoalsWidget : WidgetItem()
+
+    data class PrescriptionService(
+        val navController: NavController,
+        val view: android.view.View,
+        val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback
+    ) : WidgetItem() {
+        val onClick: () -> Unit = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+            navController.navigate(Routes.prescriptions2)
+        }
+    }
+
+    data class AppointmentService(
+        val navController: NavController,
+        val view: android.view.View,
+        val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback
+    ) : WidgetItem() {
+        val onClick: () -> Unit = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+            navController.navigate(Routes.upcomingAndAastAppointments)
+        }
+    }
+
+    data class TestResultService(
+        val view: android.view.View,
+        val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback
+    ) : WidgetItem() {
+        val onClick: () -> Unit = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+            // Add navigation route when available
+        }
+    }
+
+    data class VaccinationService(
+        val view: android.view.View,
+        val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback
+    ) : WidgetItem() {
+        val onClick: () -> Unit = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+            // Add navigation route when available
+        }
+    }
+
+    data class DocumentService(
+        val view: android.view.View,
+        val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback
+    ) : WidgetItem() {
+        val onClick: () -> Unit = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+            // Add navigation route when available
+        }
+    }
+
+    data class NHS111Info(
+        val context: android.content.Context,
+        val view: android.view.View,
+        val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback
+    ) : WidgetItem() {
+        val onClick: () -> Unit = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+
+            try {
+                val builder = androidx.browser.customtabs.CustomTabsIntent.Builder()
+                builder.setShowTitle(true)
+                builder.setUrlBarHidingEnabled(true)
+
+                val customTabsIntent = builder.build()
+                customTabsIntent.launchUrl(context, android.net.Uri.parse("https://111.nhs.uk"))
+            } catch (e: Exception) {
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://111.nhs.uk"))
+                context.startActivity(intent)
+            }
+        }
+    }
+
+    data class HealthAtoZInfo(
+        val context: android.content.Context,
+        val view: android.view.View,
+        val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback
+    ) : WidgetItem() {
+        val onClick: () -> Unit = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+
+            try {
+                val builder = androidx.browser.customtabs.CustomTabsIntent.Builder()
+                builder.setShowTitle(true)
+                builder.setUrlBarHidingEnabled(true)
+
+                val customTabsIntent = builder.build()
+                customTabsIntent.launchUrl(context, android.net.Uri.parse("https://www.nhs.uk/conditions/"))
+            } catch (e: Exception) {
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://www.nhs.uk/conditions/"))
+                context.startActivity(intent)
+            }
+        }
+    }
+
+    data class NHSServicesInfo(
+        val context: android.content.Context,
+        val view: android.view.View,
+        val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback
+    ) : WidgetItem() {
+        val onClick: () -> Unit = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+
+            try {
+                val builder = androidx.browser.customtabs.CustomTabsIntent.Builder()
+                builder.setShowTitle(true)
+                builder.setUrlBarHidingEnabled(true)
+
+                val customTabsIntent = builder.build()
+                customTabsIntent.launchUrl(context, android.net.Uri.parse("https://www.nhs.uk/nhs-services/"))
+            } catch (e: Exception) {
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://www.nhs.uk/nhs-services/"))
+                context.startActivity(intent)
             }
         }
     }

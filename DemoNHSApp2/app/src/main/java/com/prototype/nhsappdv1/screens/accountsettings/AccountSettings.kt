@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -122,20 +123,154 @@ fun AccountSettings(navController: NavController, modifier: Modifier) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        // Avatar
+                        // Avatar - 3D Glassmorphic Circle
                         Box(
-                            modifier = Modifier
-                                .size(96.dp)
-                                .clip(CircleShape)
-                                .background(Color.White),
+                            modifier = Modifier.size(112.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(
-                                Icons.Outlined.Person,
-                                contentDescription = "Profile",
-                                tint = nhsBlue,
-                                modifier = Modifier.size(56.dp)
+                            // Outer glow/shadow rings
+                            Box(
+                                modifier = Modifier
+                                    .size(112.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        brush = Brush.radialGradient(
+                                            colors = listOf(
+                                                nhsBlue.copy(alpha = 0.2f),
+                                                Color.Transparent
+                                            )
+                                        )
+                                    )
                             )
+
+                            // Main 3D container with elevated shadow
+                            Box(
+                                modifier = Modifier
+                                    .size(96.dp)
+                                    .graphicsLayer {
+                                        shadowElevation = 12.dp.toPx()
+                                        shape = CircleShape
+                                        clip = true
+                                        ambientShadowColor = nhsBlue
+                                        spotShadowColor = nhsBlue
+                                    }
+                                    .clip(CircleShape)
+                                    .background(
+                                        brush = Brush.linearGradient(
+                                            colors = listOf(
+                                                Color(0xFFF5F8FA),
+                                                Color.White
+                                            ),
+                                            start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                                            end = androidx.compose.ui.geometry.Offset(300f, 300f)
+                                        )
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                // Inner shadow/depth ring
+                                Box(
+                                    modifier = Modifier
+                                        .size(96.dp)
+                                        .clip(CircleShape)
+                                        .background(
+                                            brush = Brush.radialGradient(
+                                                colors = listOf(
+                                                    Color.Transparent,
+                                                    Color.Black.copy(alpha = 0.03f),
+                                                    Color.Black.copy(alpha = 0.08f)
+                                                ),
+                                                center = androidx.compose.ui.geometry.Offset(150f, 150f),
+                                                radius = 200f
+                                            )
+                                        )
+                                )
+
+                                // Glassmorphic frosted overlay
+                                Box(
+                                    modifier = Modifier
+                                        .size(92.dp)
+                                        .clip(CircleShape)
+                                        .background(
+                                            brush = Brush.linearGradient(
+                                                colors = listOf(
+                                                    Color.White.copy(alpha = 0.5f),
+                                                    Color.White.copy(alpha = 0.2f)
+                                                ),
+                                                start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                                                end = androidx.compose.ui.geometry.Offset(200f, 200f)
+                                            )
+                                        )
+                                )
+
+                                // Subtle border ring for definition
+                                Box(
+                                    modifier = Modifier
+                                        .size(96.dp)
+                                        .clip(CircleShape)
+                                        .background(
+                                            brush = Brush.linearGradient(
+                                                colors = listOf(
+                                                    nhsBlue.copy(alpha = 0.15f),
+                                                    Color.Transparent,
+                                                    nhsBlue.copy(alpha = 0.1f)
+                                                ),
+                                                start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                                                end = androidx.compose.ui.geometry.Offset(300f, 300f)
+                                            )
+                                        )
+                                        .padding(1.dp)
+                                        .clip(CircleShape)
+                                        .background(Color.Transparent)
+                                )
+
+                                // Icon centered
+                                Icon(
+                                    Icons.Outlined.Person,
+                                    contentDescription = "Profile",
+                                    tint = nhsBlue,
+                                    modifier = Modifier.size(56.dp)
+                                )
+
+                                // Top shine/highlight for glossy 3D effect
+                                Box(
+                                    modifier = Modifier
+                                        .size(96.dp)
+                                        .offset(y = (-8).dp)
+                                        .clip(CircleShape)
+                                        .background(
+                                            brush = Brush.verticalGradient(
+                                                colors = listOf(
+                                                    Color.White.copy(alpha = 0.7f),
+                                                    Color.White.copy(alpha = 0.3f),
+                                                    Color.Transparent,
+                                                    Color.Transparent
+                                                ),
+                                                startY = 0f,
+                                                endY = 120f
+                                            )
+                                        )
+                                )
+
+                                // Bottom shadow for more depth
+                                Box(
+                                    modifier = Modifier
+                                        .size(96.dp)
+                                        .offset(y = 8.dp)
+                                        .clip(CircleShape)
+                                        .background(
+                                            brush = Brush.verticalGradient(
+                                                colors = listOf(
+                                                    Color.Transparent,
+                                                    Color.Transparent,
+                                                    Color.Black.copy(alpha = 0.05f),
+                                                    Color.Black.copy(alpha = 0.1f)
+                                                ),
+                                                startY = 0f,
+                                                endY = 300f
+                                            )
+                                        )
+                                )
+                            }
                         }
 
                         // Name
