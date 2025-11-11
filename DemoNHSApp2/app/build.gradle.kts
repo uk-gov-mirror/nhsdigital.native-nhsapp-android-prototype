@@ -7,15 +7,15 @@ plugins {
 }
 
 android {
-    namespace = "com.prototype.nhsappcv1"
+    namespace = "com.prototype.nhsappdv1"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.prototype.nhsappcv1"
+        applicationId = "com.prototype.nhsappdv1"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 13
-        versionName = "13.0"
+        targetSdk = 34
+        versionCode = 12
+        versionName = "12.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
