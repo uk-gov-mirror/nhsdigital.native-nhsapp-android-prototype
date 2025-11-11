@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SplashScreen" parent="Theme.DemoNHSApp">
+        <item name="android:windowSplashScreenBackground">@color/nhslogo_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/nhslogo_foreground</item>
+        <item name="android:windowSplashScreenAnimationDuration">1000</item>
+    </style>
+
+    <style name="Theme.DemoNHSApp" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
